@@ -1,10 +1,7 @@
 name: Monorepo Automated Release Architecture
 
 on:
-  workflow_run:
-    workflows: ['Monorepo Production Integration Verification Engine']
-    types:
-      - completed
+  push:
     branches:
       - release
       - 'release/**'
@@ -21,19 +18,14 @@ jobs:
     name: Track Changesets & Orchestrate Release Cycle
     runs-on: ubuntu-latest
 
-    # Vital condition: only runs if the CI workflow has ended with SUCCESS.
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     steps:
-      # IMPORTANT: As workflow_run runs by default in the context of the most recent default branch commit.
-      # NEED to explicitly tell the checkout to pull the branch code that triggered the CI (ex: release/v1.1.1).
       - name: Checkout Source Context
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Enforces full git history for automated tagging pipelines
-          ref: ${{ github.event.workflow_run.head_branch }}
+          ref: ${{ github.ref_name }}
 
-      # LOOP PROTECTION: Checks if the commit that triggered the CI was made by the bot itself.
+      # LOOP PROTECTION: Checks if the commit that triggered the push was made by the bot itself.
       - name: Guard Against Bot Commit Loops
         id: check_bot_commit
         run: |
@@ -74,6 +66,29 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Wait for CI Verification Success
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Waiting for CI checks to pass on commit ${{ github.sha }}..."
+          while true; do
+            STATUS=$(gh api repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs --jq '.check_runs[] | select(.name != "Track Changesets & Orchestrate Release Cycle") | .conclusion')
+
+            if echo "$STATUS" | grep -q "null"; then
+              echo "CI checks still running, waiting 10 seconds..."
+              sleep 10
+              continue
+            fi
+
+            if echo "$STATUS" | grep -q "failure"; then
+              echo "❌ CI checks failed! Aborting release."
+              exit 1
+            fi
+
+            echo "✅ All CI checks passed successfully!"
+            break
+          done
+
       # Performs versioning using the package.json script directly.
       - name: Execute Direct Versioning Pipeline
         if: steps.check_bot_commit.outputs.is_bot_commit == 'false'
@@ -93,18 +108,18 @@ jobs:
 
       # Commits and sends version and changelog changes back to the origin branch dynamically.
       - name: Push Version Bumps to Release Branch
-        if: steps.check_changes.outputs.has_changes == 'true'
+        if: steps.check_changes.outputs.has_changes == 'true' && steps.check_bot_commit.outputs.is_bot_commit == 'false'
         env:
           LEFTHOOK: '0'
         run: |
           git add .
           git commit -m "chore(release): bump package versions and compile changelogs [skip ci]"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.event.workflow_run.head_branch }}
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
 
       # Creates GitHub Release and Tag pointing to the updated version commit.
       - name: Create GitHub Release and Tag
-        if: steps.check_changes.outputs.has_changes == 'true'
+        if: steps.check_changes.outputs.has_changes == 'true' && steps.check_bot_commit.outputs.is_bot_commit == 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_SHA: $(git rev-parse HEAD) # Vital condition: only runs if the CI workflow has ended with SUCCESS.
+          GITHUB_SHA: ${{ github.sha }}
         run: pnpm run release:github

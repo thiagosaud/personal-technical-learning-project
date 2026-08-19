@@ -33,6 +33,8 @@ importers:
         specifier: ^1.3.2
         version: 1.3.2(typescript@7.0.2)
 
+  projects/ai-engineer/machine-learning/linear-and-logistical-regression/case-byd: {}
+
 packages:
 
   '@babel/code-frame@7.29.7':

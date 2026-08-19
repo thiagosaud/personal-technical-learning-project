@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- d56763c: Correction in Workflows CLI Logic
+
+## 1.1.0
+
+### Minor Changes
+
+- 32cd385: Github Release and Tag Automation
+
+## 1.0.0
+
+### Major Changes
+
+- 53356a5: Initial enterprise monorepo infrastructure setup with automated testing pipelines and VS Code development guards.
+
 ## 1.0.0-rc.0
 
 ### Major Changes

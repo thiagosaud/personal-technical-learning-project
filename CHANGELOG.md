@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- 32cd385: Github Release and Tag Automation
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,0 +1,19 @@
+# Gitleaks Configuration — Enterprise Secret Scanning Protection
+# Reference: https://github.com
+
+title = "Global Monorepo Secret Scanning Guardrails"
+
+[[rules]]
+    id = "generic-api-private-key"
+    description = "Detect high-entropy generic credentials, key pairs, and private data arrays"
+    regex = '''(?i)(key|api|token|secret|password|passwd)[-|_| ]*[= | :][ "']*[a-zA-Z0-9-_\.\~]{20,}[ "']*'''
+    entropy = 3.5
+    keywords = ["key", "api", "token", "secret", "password"]
+
+[allowlist]
+    description = "Global structural infrastructure exceptions for cache and package trees"
+    paths = [
+        '''(?i)(^|/)node_modules/''',
+        '''(?i)(^|/)\.pnpm-store/''',
+        '''(?i)(^|/)\.venv/'''
+    ]

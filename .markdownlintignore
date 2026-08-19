@@ -1,0 +1,55 @@
+# Dependencies
+
+node_modules/
+.pnpm-store/
+
+# Build output
+
+.next/
+out/
+dist/
+build/
+.changeset
+
+# Coverage / test output
+
+coverage/
+.nyc_output/
+.vitest/
+test-results/
+playwright-report/
+blob-report/
+
+# Python
+
+.venv/
+**pycache**/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ML / Telemetry Output
+
+mlruns/
+.mlruns/
+.mlflow/
+artifacts/
+
+# Generated / temporary
+
+tmp/
+temp/
+.cache/
+
+# IDE
+
+.idea/
+.vscode/
+
+# Git
+
+.git/
+
+# Docker generated data
+
+docker-data/

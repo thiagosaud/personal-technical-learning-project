@@ -1,0 +1,15 @@
+# PNPM Workspace Configuration Engine
+# Reference: https://pnpm.io
+
+# Dynamically maps the real folders of your monorepo ecosystem
+packages:
+  - '.'
+  - 'projects/**'
+
+# Security policies against dependency poisoning and supply chain attacks
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+
+# Explicitly grants permission for Lefthook to compile/inject native binary elements
+allowBuilds:
+  lefthook: true

@@ -1,0 +1,17 @@
+{
+  "version": "0.1.0",
+  "configurations": [
+    {
+      "name": "Python: Debug Active Subproject File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}", // Executes the currently open file in your editor tab
+      "console": "integratedTerminal",
+      "cwd": "${fileDirname}", // Sets the runtime execution directory to the folder containing the file
+      "justMyCode": true,  // Stepping is restricted to user-authored blocks, skipping library internals
+      "env": {
+        "PYTHONPATH": "${fileDirname}" // Ensures the local runtime resolver dynamically treats the active project folder as root
+      }
+    }
+  ]
+}

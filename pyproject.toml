@@ -1,0 +1,68 @@
+[project]
+name = "personal-technical-learning-project"
+version = "0.1.0"
+description = "Global governance and linting configuration layer for polyglot monorepo"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [] # Kept empty at the root to ensure isolation. Real dependencies go on subprojects.
+
+# Global group of Python development tools stuck by root version.
+[dependency-groups]
+dev = [
+    "bandit==1.8.2",
+    "pytest==8.3.4",
+    "ruff==0.16.3",
+    "semgrep==1.104.0",
+    "setuptools<81",
+]
+
+[tool.uv]
+managed = true # Configures the global root to act in uv workspace mode in case new Python packages appear.
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+exclude = [
+    ".git",
+    ".cache",
+    ".venv",
+    "__pycache__",
+    "node_modules",
+    "dist",
+    "build",
+    "out",
+    ".next",
+]
+
+# Strict selection of rules for resilient corporate environments.
+[tool.ruff.lint]
+ignore = []
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort (Automatic import sorting)
+    "B",   # flake8-bugbear (design and logical traps)
+    "C4",  # flake8-comprehensions (loop optimization)
+    "UP",  # pyupgrade (ensures modern syntax for the selected version)
+    "SIM", # flake8-simplify (logical expression readability)
+    "S",   # flake8-bandit (native static security analysis)
+]
+
+# Dynamically maps first-level imports for the Python ecosystem
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+# Ignores assertions or prints checks only in local test files
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**/*.py" = ["S101", "T201"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-v -ra" # Adds execution flags: -v (verbal/detailed) and -ra (shows summary of failed/clean tests).
+
+# Defines the real macro folders without the use of wildcards (**) that break the interpreter.
+# The Pytest will enter the projects folder and discover all tests of the subprojects automatically
+testpaths = ["projects"]
+norecursedirs = ["node_modules", ".venv", ".git", "dist", "build", ".cache"] # Forces the pytest to ignore infrastructure and cache folders to optimize the scanning speed

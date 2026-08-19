@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- d56763c: Correction in Workflows CLI Logic
+
 ## 1.1.0
 
 ### Minor Changes

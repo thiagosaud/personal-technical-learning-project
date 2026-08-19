@@ -69,7 +69,7 @@ jobs:
         run: |
           git add .
           git commit -m "chore(release): bump package versions and compile changelogs [skip ci]"
-          git push origin main
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
 
       # Creates GitHub Release and Tag pointing to the updated version commit.
       - name: Create GitHub Release and Tag

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+### Major Changes
+
+- 53356a5: Initial enterprise monorepo infrastructure setup with automated testing pipelines and VS Code development guards.
+
 ## 1.0.0-rc.0
 
 ### Major Changes

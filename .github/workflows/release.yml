@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: write # Required to create git tags, releases and push version bumps
-  pull-requests: write # Required for Changesets to open the automated release PR
 
 concurrency:
   group: release-main
@@ -43,18 +42,38 @@ jobs:
       - name: Provision Node Packages
         run: pnpm install --frozen-lockfile
 
-      # If changesets exist, this action opens or updates the Version Packages PR.
-      # Package publishing is intentionally not configured because this monorepo
-      # does not define a registry publish command.
-      - name: Execute Automated Versioning Pipeline
-        uses: changesets/action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version-script: pnpm run changeset:version:packages
-          commit-message: 'chore(release): bump package versions and compile changelogs [skip ci]'
-          pr-title: 'Version Packages'
+      - name: Configure Git Identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      # Performs versioning using the package.json script directly in the main.
+      - name: Execute Direct Versioning Pipeline
+        run: pnpm run changeset:version:packages
+
+      # Checks if the changesets generated version changes.
+      - name: Check for Version Updates
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changesets found to version."
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Version updates detected."
+          fi
+
+      # Commits and sends version and changelog changes directly to the main branch.
+      - name: Push Version Bumps to Main
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git add .
+          git commit -m "chore(release): bump package versions and compile changelogs [skip ci]"
+          git push origin main
+
+      # Creates GitHub Release and Tag pointing to the updated version commit.
       - name: Create GitHub Release and Tag
+        if: steps.check_changes.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}

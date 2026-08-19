@@ -66,6 +66,8 @@ jobs:
       # Commits and sends version and changelog changes directly to the main branch.
       - name: Push Version Bumps to Main
         if: steps.check_changes.outputs.has_changes == 'true'
+        env:
+          LEFTHOOK: '0'
         run: |
           git add .
           git commit -m "chore(release): bump package versions and compile changelogs [skip ci]"

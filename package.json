@@ -29,6 +29,7 @@
     "changeset:pre-enter": "changeset pre enter rc",
     "changeset:pre-exit": "changeset pre exit",
     "changeset:version:packages": "changeset version && pnpm install --no-frozen-lockfile",
+    "release:github": "node scripts/create-github-release.mjs",
     "lint:commit": "commitlint --edit",
     "lint:branch": "validate-branch-name",
     "lint:branch:ci": "node scripts/validate-branch-name.mjs",

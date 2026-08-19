@@ -6,7 +6,7 @@ pre-commit:
   commands:
     gitleaks-audit:
       tags: security
-      run: pnpm run security:secrets
+      run: npx gitleaks-secret-scanner detect --verbose --redact
     prettier-format:
       glob: '*.{json,md,yaml,yml,mjs,js}'
       run: pnpm run format:js

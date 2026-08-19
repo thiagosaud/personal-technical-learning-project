@@ -8,6 +8,10 @@ permissions:
   contents: write # Required to create git tags, releases and push version bumps
   pull-requests: write # Required for Changesets to open the automated release PR
 
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
 jobs:
   automated_release:
     name: Track Changesets & Orchestrate Release Cycle
@@ -39,20 +43,13 @@ jobs:
       - name: Provision Node Packages
         run: pnpm install --frozen-lockfile
 
-      - name: Setup UV Environment Tooling
-        uses: astral-sh/setup-uv@v5
+      # If changesets exist, this action opens or updates the Version Packages PR.
+      # Package publishing is intentionally not configured because this monorepo
+      # does not define a registry publish command.
+      - name: Execute Automated Versioning Pipeline
+        uses: changesets/action@v2
         with:
-          enable-cache: true
-          version: 'latest'
-
-      # If changesets exist, this official action automatically blocks direct main bumps,
-      # opens an active "Version Packages" Pull Request containing the updated package.json and CHANGELOG.md.
-      # Once you merge that PR, it automatically creates the production Git Tags.
-      - name: Execute Automated Release and Tagging Pipeline
-        uses: changesets/action@v1
-        with:
-          version: pnpm run changeset:version:packages
-          commit: 'chore(release): bump package versions and compile changelogs [skip ci]'
-          title: 'Version Packages'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version-script: pnpm run changeset:version:packages
+          commit-message: 'chore(release): bump package versions and compile changelogs [skip ci]'
+          pr-title: 'Version Packages'

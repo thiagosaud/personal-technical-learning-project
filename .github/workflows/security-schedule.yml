@@ -6,7 +6,10 @@ on:
 
 permissions:
   contents: read
-  security-events: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   nightly_security_scan:

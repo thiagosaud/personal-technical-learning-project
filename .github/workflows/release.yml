@@ -53,3 +53,9 @@ jobs:
           version-script: pnpm run changeset:version:packages
           commit-message: 'chore(release): bump package versions and compile changelogs [skip ci]'
           pr-title: 'Version Packages'
+
+      - name: Create GitHub Release and Tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: pnpm run release:github

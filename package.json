@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "personal-technical-learning-project",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0",
   "license": "MIT",
   "packageManager": "pnpm@11.22.0",
   "description": "Global corporate governance and integration pipeline layer for polyglot monorepo",

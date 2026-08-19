@@ -1,0 +1,37 @@
+# Lefthook Git Hook Management Engine Orchestration
+# Reference: https://github.com
+
+pre-commit:
+  parallel: false
+  commands:
+    gitleaks-audit:
+      tags: security
+      run: pnpm run security:secrets
+    prettier-format:
+      glob: '*.{json,md,yaml,yml,mjs,js}'
+      run: pnpm run format:js
+      stage_fixed: true
+    ruff-format:
+      glob: '*.py'
+      run: pnpm run format:py
+      stage_fixed: true
+    ruff-lint:
+      glob: '*.py'
+      run: pnpm run lint:code:py
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm run lint:commit
+
+pre-push:
+  parallel: true
+  commands:
+    validate-branch:
+      run: pnpm run lint:branch
+    semgrep-sast:
+      run: pnpm run lint:security:semgrep
+    bandit-sast:
+      run: pnpm run lint:security:py
+    python-tests:
+      run: pnpm run test:py

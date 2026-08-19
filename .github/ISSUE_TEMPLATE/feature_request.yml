@@ -1,0 +1,38 @@
+name: '🚀 Feature Request'
+description: 'Propose a new core capability, algorithmic model, or architecture expansion'
+body:
+  - type: markdown
+    attributes:
+      value: '### Enterprise Architecture & Innovation Protocol'
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 'Is your feature request related to a problem?'
+      placeholder: 'Provide a clear and concise description of what the limitation is (e.g., Inference latency is high when evaluating BYD specs)...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 'Describe the Proposed Solution'
+      placeholder: 'A clear description of what you want to happen and the engineering impact...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Describe Alternatives You've Considered"
+      placeholder: "List any alternative solutions or features you've evaluated locally..."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 'Alignment & Prerequisites'
+      options:
+        - label: 'This feature complies with the active SECURITY.md parameters'
+          required: true
+        - label: 'I am willing to contribute or implement this feature myself if approved'
+          required: false

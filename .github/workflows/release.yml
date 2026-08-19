@@ -1,0 +1,58 @@
+name: Monorepo Automated Release Architecture
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write # Required to create git tags, releases and push version bumps
+  pull-requests: write # Required for Changesets to open the automated release PR
+
+jobs:
+  automated_release:
+    name: Track Changesets & Orchestrate Release Cycle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Context
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Enforces full git history for automated tagging pipelines
+
+      - name: Setup Node Runtime (Stable LTS Layer)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache PNPM Store Layout
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Enable Corepack & Pre-fetch Pinned Package Manager
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.22.0 --activate
+
+      - name: Provision Node Packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup UV Environment Tooling
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: 'latest'
+
+      # If changesets exist, this official action automatically blocks direct main bumps,
+      # opens an active "Version Packages" Pull Request containing the updated package.json and CHANGELOG.md.
+      # Once you merge that PR, it automatically creates the production Git Tags.
+      - name: Execute Automated Release and Tagging Pipeline
+        uses: changesets/action@v1
+        with:
+          version: pnpm run changeset:version:packages
+          commit: 'chore(release): bump package versions and compile changelogs [skip ci]'
+          title: 'Version Packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

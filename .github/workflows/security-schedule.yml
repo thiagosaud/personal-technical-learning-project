@@ -1,0 +1,51 @@
+name: Global Security & Vulnerability Scheduled Audit
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Executes automatically every single night at 02:00 AM UTC
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  nightly_security_scan:
+    name: Deep Vulnerability Scan Execution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Context
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Enforces full history tracking for historical patch parsing
+
+      - name: Enterprise Secret Detection Sweep (Gitleaks v3 Active Specification)
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node Runtime (Stable LTS Layer)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable Corepack & Pre-fetch Pinned Package Manager
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.22.0 --activate
+
+      - name: Provision Node Packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup UV Environment Tooling
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: 'latest'
+
+      - name: Sync Production Environment Dependencies
+        run: uv sync --frozen
+
+      - name: Full SAST Deep Audit (Semgrep & Bandit Comprehensive)
+        run: |
+          pnpm run lint:security:semgrep
+          pnpm run lint:security:py

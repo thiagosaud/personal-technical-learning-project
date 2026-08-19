@@ -1,0 +1,55 @@
+{
+  "private": true,
+  "name": "personal-technical-learning-project",
+  "version": "1.0.0-rc.0",
+  "license": "MIT",
+  "packageManager": "pnpm@11.22.0",
+  "description": "Global corporate governance and integration pipeline layer for polyglot monorepo",
+  "homepage": "https://github.com/thiagosaud/personal-technical-learning-project",
+  "keywords": [],
+  "author": {
+    "name": "THIAGO SAUD",
+    "url": "https://github.com/thiagosaud"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thiagosaud/personal-technical-learning-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thiagosaud/personal-technical-learning-project/issues"
+  },
+  "scripts": {
+    "prepare": "lefthook install",
+    "changeset": "changeset",
+    "changeset:auto": "changeset --since main",
+    "changeset:pre-enter": "changeset pre enter rc",
+    "changeset:pre-exit": "changeset pre exit",
+    "changeset:version:packages": "changeset version && pnpm install --no-frozen-lockfile",
+    "lint:commit": "commitlint --edit",
+    "lint:branch": "validate-branch-name",
+    "lint:markdown": "markdownlint --config .markdownlint.json --ignore-path .markdownlintignore --dot .",
+    "lint:markdown:fix": "markdownlint --config .markdownlint.json --ignore-path .markdownlintignore --dot . --fix",
+    "lint:code:js": "prettier --check .",
+    "lint:code:js:fix": "prettier --write .",
+    "lint:code:py": "uv run ruff check .",
+    "lint:code:py:fix": "uv run --frozen ruff check . --fix",
+    "lint:security:py": "uv run bandit -r . -c .bandit.yaml",
+    "lint:security:semgrep": "uv run --frozen semgrep scan --config=.semgrep.yaml --config=p/security-audit --quiet --error",
+    "lint:all:fix": "pnpm run lint:markdown:fix && pnpm run lint:code:js:fix && pnpm run lint:code:py:fix && pnpm run format:py",
+    "format:js": "prettier --write .",
+    "format:py": "uv run --frozen ruff format .",
+    "security:secrets": "gitleaks detect --verbose --redact",
+    "security:sonar": "sonar-scanner",
+    "test:ci:local:all": "act pull_request --container-architecture linux/amd64 --rebuild",
+    "test:py": "uv run --frozen pytest"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.0",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "lefthook": "^2.1.10",
+    "markdownlint-cli": "^0.49.1",
+    "prettier": "^3.9.6",
+    "validate-branch-name": "^1.3.2"
+  }
+}

@@ -1,0 +1,19 @@
+# Bandit Security Analyzer Global Configuration
+# Reference: https://readthedocs.io
+
+targets:
+  - '.'
+exclude_dirs:
+  - 'node_modules'
+  - '**/node_modules/**'
+  - '.venv'
+  - '**/.venv/**'
+  - 'dist'
+  - '**/dist/**'
+  - 'build'
+  - 'tests'
+  - '**/tests/**'
+
+# Configure profile exclusions for known safe patterns
+skips:
+  - 'B101' # Allow assert statements in generic environments (handled selectively by Ruff)

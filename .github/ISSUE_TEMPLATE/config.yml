@@ -1,0 +1,9 @@
+# Global Issue Configuration Schema Override
+# Reference: https://github.com
+
+blank_issues_enabled: false
+
+contact_links:
+  - name: '🚨 Report a Security Vulnerability'
+    url: 'https://github.com/thiagosaud/personal-technical-learning-project/issues'
+    about: 'If you discovered a security vulnerability or critical secret exposure leak, submit a private report natively here.'

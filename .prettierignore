@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Coverage / test output
+coverage/
+.nyc_output/
+.vitest/
+test-results/
+playwright-report/
+blob-report/
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ML
+mlruns/
+.mlruns/
+.mlflow/
+artifacts/
+models/
+
+# Generated / temporary
+tmp/
+temp/
+.cache/
+
+# Lockfiles
+pnpm-lock*.yaml
+uv.lock
+
+# Generated files
+apps/web/next-env.d.ts
+*.min.js
+*.min.css
+*.map
+
+# IDE
+.idea/
+.vscode/
+
+# Git
+.git/
+
+# Docker generated data
+docker-data/

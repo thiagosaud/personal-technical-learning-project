@@ -1,0 +1,19 @@
+# GitHub Dependabot Configuration Engine
+# Reference: https://github.com
+
+version: 2
+updates:
+  # 1. Automated ecosystem tracking for Node.js (Monorepo Root)
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+
+  # 2. Automated ecosystem tracking for Python Workspace
+  # Targets the root directory where the unified uv workspace engine resides
+  - package-ecosystem: 'pip'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5

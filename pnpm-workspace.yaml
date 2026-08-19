@@ -12,4 +12,5 @@ blockExoticSubdeps: true
 
 # Explicitly grants permission for Lefthook to compile/inject native binary elements
 allowBuilds:
+  gitleaks-secret-scanner: true
   lefthook: true

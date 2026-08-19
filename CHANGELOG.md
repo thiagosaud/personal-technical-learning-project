@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- 0e73e66: Dependabot Fixing
+
 ## 1.1.1
 
 ### Patch Changes

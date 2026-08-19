@@ -1,0 +1,39 @@
+[project]
+name = "case-byd"
+version = "0.1.0"
+description = "Machine Learning ETL and Modeling Layer for BYD Technical Vehicle specs"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "THIAGO SAUD", email = "126628718+thiagosaud@users.noreply.github.com" }]
+
+# Dependências de execução (Produção) estritamente necessárias e travadas
+dependencies = [
+    "adjusttext>=1.4.0",
+    "matplotlib>=3.11.1",
+    "numpy>=2.5.2",
+    "pandas>=3.0.5",
+    "scikit-learn>=1.9.0",
+]
+
+# Define o comando CLI local para executar o pipeline de machine learning direto via terminal
+[project.scripts]
+case-byd = "main:main"
+
+# Utiliza o moderno e ultra-rápido motor de build nativo da Astral para empacotamento
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+managed = true # Must be true for uv workspaces to track dependencies inside a monorepo
+workspace = { members = ["."] } # Guarantees security lock inheritance and prevents Python interpreter version conflicts
+
+[tool.ruff]
+extend = "../../../../../pyproject.toml"
+src = ["."]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "config",
+    "layer",
+]

@@ -18,6 +18,10 @@
   "bugs": {
     "url": "https://github.com/thiagosaud/personal-technical-learning-project/issues"
   },
+  "validate-branch-name": {
+    "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert)/([a-z0-9-]+)$",
+    "errorMsg": "❌ [BRANCH LINT ERROR] Branch name outside the Enterprise standard!\n💡 Use the format: <type>/<short-description-in-kebab-case>\n📌 Example: feat/linear-regression-byd\n🚀 Allowed types: feat, fix, docs, style, refactor, perf, test, chore, ci, revert"
+  },
   "scripts": {
     "prepare": "lefthook install",
     "changeset": "changeset",
@@ -27,6 +31,7 @@
     "changeset:version:packages": "changeset version && pnpm install --no-frozen-lockfile",
     "lint:commit": "commitlint --edit",
     "lint:branch": "validate-branch-name",
+    "lint:branch:ci": "node scripts/validate-branch-name.mjs",
     "lint:markdown": "markdownlint --config .markdownlint.json --ignore-path .markdownlintignore --dot .",
     "lint:markdown:fix": "markdownlint --config .markdownlint.json --ignore-path .markdownlintignore --dot . --fix",
     "lint:code:js": "prettier --check .",

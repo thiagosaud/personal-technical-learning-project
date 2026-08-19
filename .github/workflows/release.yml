@@ -2,13 +2,15 @@ name: Monorepo Automated Release Architecture
 
 on:
   push:
-    branches: [main]
+    branches:
+      - release
+      - 'release/**' # Correção da sintaxe do gatilho
 
 permissions:
   contents: write # Required to create git tags, releases and push version bumps
 
 concurrency:
-  group: release-main
+  group: release-branch
   cancel-in-progress: false
 
 jobs:
@@ -47,7 +49,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      # Performs versioning using the package.json script directly in the main.
+      # Performs versioning using the package.json script directly.
       - name: Execute Direct Versioning Pipeline
         run: pnpm run changeset:version:packages
 
@@ -63,15 +65,15 @@ jobs:
             echo "Version updates detected."
           fi
 
-      # Commits and sends version and changelog changes directly to the main branch.
-      - name: Push Version Bumps to Main
+      # Commits and sends version and changelog changes back to the origin branch dynamically.
+      - name: Push Version Bumps to Release Branch
         if: steps.check_changes.outputs.has_changes == 'true'
         env:
           LEFTHOOK: '0'
         run: |
           git add .
           git commit -m "chore(release): bump package versions and compile changelogs [skip ci]"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
 
       # Creates GitHub Release and Tag pointing to the updated version commit.
       - name: Create GitHub Release and Tag

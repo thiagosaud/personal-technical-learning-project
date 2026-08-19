@@ -12,8 +12,7 @@ dev = [
     "bandit==1.8.2",
     "pytest==8.3.4",
     "ruff==0.16.3",
-    "semgrep==1.104.0",
-    "setuptools<81",
+    "semgrep>=1.173.0",
 ]
 
 [tool.uv]

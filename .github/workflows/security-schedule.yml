@@ -2,11 +2,9 @@ name: 'SECURITY SCHEDULE WORKFLOW'
 
 on:
   schedule:
-    - cron: '0 2 * * *'
-
-  pull_request:
-    branches:
-      - main
+    # 0 2 * * 4 -> Minute 0, Hour 2 (UTC), Every day of month, Every month, 4 = Thursday.
+    # Note: Workflows triggered by 'schedule' strictly execute ONLY on the default branch (main).
+    - cron: '0 2 * * 4'
 
   workflow_dispatch:
 

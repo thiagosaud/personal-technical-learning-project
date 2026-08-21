@@ -30,7 +30,23 @@ if ! command -v uv &> /dev/null; then
     exit 1
 fi
 
-echo "✓ Core runtimes detected: Node.js, pnpm, and uv."
+if ! command -v python3 &> /dev/null; then
+    echo "❌ Error: 'python3' is not installed."
+    exit 1
+fi
+
+if ! command -v docker &> /dev/null; then
+    echo "❌ Error: 'docker' container runtime engine is not installed."
+    exit 1
+fi
+
+if ! command -v act &> /dev/null; then
+    echo "❌ Error: 'act' local GitHub Actions runner is not installed."
+    echo "💡 Install it by running: brew install nektos/tap/act"
+    exit 1
+fi
+
+echo "✅ Core runtimes detected: Node.js, pnpm, uv, Python, Docker, and Act."
 
 # ==========================================
 # 2. SAFETY CLEANUP
@@ -50,9 +66,9 @@ if [ -d "projects" ]; then
 fi
 
 # ==========================================
-# 3. NODE WORKSPACE INSTALLATION
+# 3. PNPM WORKSPACE INSTALLATION
 # ==========================================
-echo "📦 Installing Node.js workspace dependencies via pnpm..."
+echo "📦 Installing Libraries workspace dependencies via pnpm..."
 pnpm install --frozen-lockfile
 
 # ==========================================
@@ -70,15 +86,7 @@ uv sync --all-packages
 echo "🛡️ Executing unifed quality verification pipeline (lint:all:check)..."
 
 # Running sequential validations ensures strict error propagation across commands
-pnpm run lint:commit \
-  && pnpm run lint:branch \
-  && pnpm run lint:markdown \
-  && pnpm run lint:code:js \
-  && pnpm run lint:code:py \
-  && pnpm run lint:security:py \
-  && pnpm run lint:security:semgrep \
-  && pnpm run eslint \
-  && pnpm run security:secrets
+pnpm lint:all:check
 
 echo "--------------------------------------------"
 echo "✅ Monorepo environment configured and validated successfully!"

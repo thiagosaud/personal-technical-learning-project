@@ -66,8 +66,6 @@ select = [
 ]
 
 ignore = [
-    "ANN101", # Missing type annotation for 'self' in methods (Redundante no Python moderno)
-    "ANN102", # Missing type annotation for 'cls' in classmethods
     "ANN401", # Dynamically typed expressions (Any) are disallowed (Permitido quando estritamente necessário)
     "S101",   # Use of `assert` detected (Precisamos ignorar globalmente aqui para permitir nos testes, trataremos abaixo)
 ]

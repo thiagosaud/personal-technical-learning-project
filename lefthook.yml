@@ -39,13 +39,17 @@ commit-msg:
       run: pnpm lint:check:commit
 
 pre-push:
+  # This guarantees 'pnpm install' and 'uv sync' run seamlessly and deterministically.
+  setup:
+    - run: pnpm infra:script:setup
+
   parallel: true
   commands:
     # 4. GLOBAL QUALITY GATEWAY RULES (Executed in parallel before code pushes upstream)
     # Synced exactly with your hardened semantic package.json production targets
     audit-branchname:
       tags: security
-      run: pnpm pnpm lint:check:branchname
+      run: pnpm infra:script:lint:check:branchname
 
     audit-sast:
       tags: security

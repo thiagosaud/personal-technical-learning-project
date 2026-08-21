@@ -18,6 +18,9 @@ pre-commit:
     ruff-lint:
       glob: '*.py'
       run: pnpm run lint:code:py
+    eslint-lint:
+      glob: '*.{js,mjs,cjs,ts,tsx}'
+      run: pnpm exec eslint {staged_files} --max-warnings 0
 
 commit-msg:
   commands:

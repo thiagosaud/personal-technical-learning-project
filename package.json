@@ -20,14 +20,7 @@
   "packageManager": "pnpm@11.22.0",
   "engines": {
     "node": ">=24.14.0",
-    "pnpm": ">=11.22.0",
-    "uv": ">=0.12.3",
-    "docker": ">=29.7.2",
-    "ruff": ">=0.16.3",
-    "bandit": ">=1.8.2",
-    "semgrep": ">=1.174.0",
-    "pytest": ">=8.3.4",
-    "python": ">=3.12.13"
+    "pnpm": ">=11.22.0"
   },
   "validate-branch-name": {
     "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|release)/([a-z0-9.-]+)$",
@@ -43,6 +36,11 @@
     "changeset:pre-enter": "changeset pre enter rc",
     "changeset:pre-exit": "changeset pre exit",
     "changeset:version:packages": "changeset version && pnpm install --no-frozen-lockfile",
+    "security:secrets": "gitleaks detect --verbose --redact",
+    "test:ci:local:all": "act pull_request --container-architecture linux/amd64 --rebuild",
+    "test:py": "uv run --frozen --all-packages pytest",
+    "format:js": "prettier --write .",
+    "format:py": "uv run --frozen ruff format .",
     "eslint": "eslint . --max-warnings 0",
     "eslint:fix": "eslint . --fix",
     "lint:commit": "commitlint --edit",
@@ -50,18 +48,12 @@
     "lint:markdown": "markdownlint --config .markdownlint.json --ignore-path .markdownlintignore --dot .",
     "lint:markdown:fix": "markdownlint --config .markdownlint.json --ignore-path .markdownlintignore --dot . --fix",
     "lint:code:js": "prettier --check .",
-    "lint:code:js:fix": "prettier --write .",
     "lint:code:py": "uv run ruff check .",
     "lint:code:py:fix": "uv run --frozen ruff check . --fix",
     "lint:security:py": "uv run bandit -r . -c .bandit.yaml",
     "lint:security:semgrep": "uv run --frozen semgrep scan --config=.semgrep.yaml --config=p/security-audit --quiet --error",
-    "lint:all:check": "pnpm run lint:commit & pnpm run lint:branch & pnpm run lint:markdown & pnpm run lint:code:js & pnpm run lint:code:py & pnpm run lint:security:py & pnpm run lint:security:semgrep & pnpm run eslint & pnpm run security:secrets",
-    "lint:all:fix": "pnpm run lint:markdown:fix && pnpm run lint:code:js:fix && pnpm run lint:code:py:fix && pnpm run format:py",
-    "format:js": "prettier --write .",
-    "format:py": "uv run --frozen ruff format .",
-    "security:secrets": "gitleaks detect --verbose --redact",
-    "test:ci:local:all": "act pull_request --container-architecture linux/amd64 --rebuild",
-    "test:py": "uv run --frozen --all-packages pytest"
+    "lint:all:check": "pnpm lint:commit && pnpm lint:branch && pnpm lint:markdown && pnpm lint:code:js && pnpm lint:code:py && pnpm lint:security:py && pnpm lint:security:semgrep && pnpm eslint && pnpm security:secrets",
+    "lint:all:fix": "pnpm lint:markdown:fix && pnpm lint:code:py:fix && pnpm eslint:fix && pnpm format:js && pnpm format:py"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.0",

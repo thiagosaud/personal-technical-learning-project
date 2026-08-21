@@ -68,7 +68,7 @@
     "test:unit:all": "pnpm test:unit:py",
     "eslint:check": "eslint . --max-warnings 0",
     "eslint:fix": "eslint . --fix",
-    "lint:check:branchname": "validate-branch-name",
+    "lint:check:branchname": "validate-branch-name -t \"${BRANCH_NAME}\"",
     "lint:check:commit": "commitlint --edit",
     "lint:check:markdown": "markdownlint --config .markdownlint.json --ignore-path .markdownlintignore --dot .",
     "lint:check:code:js": "prettier --check .",

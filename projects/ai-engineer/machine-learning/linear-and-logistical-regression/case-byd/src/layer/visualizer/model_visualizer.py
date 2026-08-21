@@ -4,6 +4,7 @@ Generates analytics plots using advanced overlapping repulsion algorithms.
 """
 
 from pathlib import Path
+from typing import Protocol
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +13,22 @@ from adjustText import adjust_text
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from config.schema.data.vehicle import VehicleSchema
+from src.config.schema.data.vehicle import VehicleSchema
+
+
+# 1. DEFINE PREDICTION ENGINE PROTOCOLS (THE RUFF TYPE FIX)
+# This structural duck-typing approach eliminates the missing type annotation errors
+# across all your model inputs without tightly coupling code to single sklearn algorithms.
+class PredictorModel(Protocol):
+    """Protocol for models supporting deterministic array regressions."""
+
+    def predict(self, X: pd.DataFrame | np.ndarray) -> np.ndarray: ...
+
+
+class ClassifierModel(Protocol):
+    """Protocol for classification engines utilizing boundary decision arrays."""
+
+    def predict_proba(self, X: pd.DataFrame | np.ndarray) -> np.ndarray: ...
 
 
 class ModelVisualizerLayer:
@@ -97,7 +113,7 @@ class ModelVisualizerLayer:
         plt.savefig(self.output_dir / filename, dpi=300)
         plt.close()
 
-    def generate_case1_plot(self, model, r2_score: float) -> None:
+    def generate_case1_plot(self, model: PredictorModel, r2_score: float) -> None:
         """Generates Case 1 plot: Simple Linear Regression."""
         self._create_base_plot(
             "Case 1: Simple Linear Regression (Weight vs. Consumption)",
@@ -127,7 +143,7 @@ class ModelVisualizerLayer:
             filename="byd_case1_linear_simples.png",
         )
 
-    def generate_case2_plot(self, model, r2_score: float) -> None:
+    def generate_case2_plot(self, model: PredictorModel, r2_score: float) -> None:
         """Generates Case 2 plot: Multiple Linear Regression (Real vs. Predicted)."""
         self._create_base_plot(
             "Case 2: Multiple Linear Regression (Real vs. Predicted Acceleration)",
@@ -157,7 +173,7 @@ class ModelVisualizerLayer:
             filename="byd_case2_linear_multiple.png",
         )
 
-    def generate_case3_plot(self, model, acc_score: float) -> None:
+    def generate_case3_plot(self, model: ClassifierModel, acc_score: float) -> None:
         """Generates Case 3 plot: Logistic Regression."""
         self._create_base_plot(
             "Case 3: Logistic Regression (Automatic Vehicle Classification)",

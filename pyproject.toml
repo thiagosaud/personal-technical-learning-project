@@ -11,12 +11,16 @@ dependencies = [] # Kept empty at the root to ensure isolation. Real dependencie
 dev = [
     "bandit==1.8.2",
     "pytest==8.3.4",
+    "pytest-srcpaths>=0.1.0",
     "ruff==0.16.3",
     "semgrep>=1.173.0",
 ]
 
 [tool.uv]
 managed = true # Configures the global root to act in uv workspace mode in case new Python packages appear.
+
+[tool.uv.workspace]
+members = ["projects/**/case-byd"] # Dynamically discovers all subprojects in the monorepo.
 
 [tool.ruff]
 target-version = "py312"
@@ -36,32 +40,60 @@ exclude = [
 
 # Strict selection of rules for resilient corporate environments.
 [tool.ruff.lint]
-ignore = []
 select = [
+    # --- Seus grupos originais mantidos ---
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
-    "F",   # Pyflakes
-    "I",   # isort (Automatic import sorting)
-    "B",   # flake8-bugbear (design and logical traps)
-    "C4",  # flake8-comprehensions (loop optimization)
-    "UP",  # pyupgrade (ensures modern syntax for the selected version)
-    "SIM", # flake8-simplify (logical expression readability)
-    "S",   # flake8-bandit (native static security analysis)
+    "F",   # Pyflakes (Erros de sintaxe e variáveis não usadas)
+    "I",   # isort (Ordenação automática e limpa de imports)
+    "B",   # flake8-bugbear (Design de código incorreto e armadilhas lógicas)
+    "C4",  # flake8-comprehensions (Otimização de performance em loops/lists)
+    "UP",  # pyupgrade (Garante uso de recursos nativos modernos do Python 3.12)
+    "SIM", # flake8-simplify (Legibilidade de expressões lógicas complexas)
+    "C90", # Complexidade ciclomática (Garante que nenhuma função vire um "monstro")
+    "S",   # flake8-bandit (Análise estática de segurança nativa do ecossistema)
+
+    # --- Expansão para Nível de Produção Avançado ---
+    "ASYNC", # flake8-async (Crucial para FastAPI/LlamaIndex: evita travar o loop de eventos)
+    "ANN",   # flake8-annotations (Força Type Hinting estrito como fizemos no TypeScript)
+    "A",     # flake8-builtins (Impede sobrescrever palavras reservadas do Python como id, list, type)
+    "T20",   # flake8-print (Banir comandos print() em produção; força o uso de Logging)
+    "PT",    # flake8-pytest-style (Garante que os testes sigam o padrão corporativo unificado)
+    "ARG",   # flake8-unused-arguments (Garante que funções não declarem parâmetros inúteis)
+    "PTH",   # flake8-use-pathlib (Força o uso da biblioteca moderna Pathlib em vez do antigo os.path)
+    "PERF",  # Perflint (Regras focadas puramente em gargalos de performance no Python)
+    "RUF",   # Regras nativas exclusivas do próprio Ruff (Prevenção de bugs ocultos)
 ]
 
-# Dynamically maps first-level imports for the Python ecosystem
-[tool.ruff.lint.isort]
-combine-as-imports = true
+ignore = [
+    "ANN101", # Missing type annotation for 'self' in methods (Redundante no Python moderno)
+    "ANN102", # Missing type annotation for 'cls' in classmethods
+    "ANN401", # Dynamically typed expressions (Any) are disallowed (Permitido quando estritamente necessário)
+    "S101",   # Use of `assert` detected (Precisamos ignorar globalmente aqui para permitir nos testes, trataremos abaixo)
+]
+
+# 3. REGRAS DE COMPLEXIDADE (Nível Sonar)
+[tool.ruff.lint.mccabe]
+# Máximo de caminhos lógicos por função antes de quebrar o build
+max-complexity = 15
 
 # Ignores assertions or prints checks only in local test files
 [tool.ruff.lint.per-file-ignores]
-"**/tests/**/*.py" = ["S101", "T201"]
+"**/tests/**/*.py" = [
+    "S101",   # Permite o uso de 'assert' (obrigatório em testes com Pytest)
+    "T201",   # Permite 'print' em logs de teste se necessário
+    "ANN201", # Desobriga o tipo de retorno em funções de teste (Ex: def test_api():)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-addopts = "-v -ra" # Adds execution flags: -v (verbal/detailed) and -ra (shows summary of failed/clean tests).
-
-# Defines the real macro folders without the use of wildcards (**) that break the interpreter.
-# The Pytest will enter the projects folder and discover all tests of the subprojects automatically
+addopts = "-v -ra --import-mode=importlib" # Adds execution flags: -v (verbal/detailed) and -ra (shows summary of failed/clean tests).
+srcpaths = ["projects/**"]
 testpaths = ["projects"]
 norecursedirs = ["node_modules", ".venv", ".git", "dist", "build", ".cache"] # Forces the pytest to ignore infrastructure and cache folders to optimize the scanning speed

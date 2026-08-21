@@ -5,9 +5,9 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from layer.data.etl import ETLLayer
-from layer.machine_learning.model_trainer import ModelTrainerLayer
-from layer.visualizer.model_visualizer import ModelVisualizerLayer
+from src.layer.data.etl import ETLLayer
+from src.layer.machine_learning.model_trainer import ModelTrainerLayer
+from src.layer.visualizer.model_visualizer import ModelVisualizerLayer
 
 
 @pytest.fixture
@@ -23,10 +23,19 @@ def test_visualizer_generates_plots(trained_pipeline: tuple[pd.DataFrame, ModelT
     """Verifies that all three case plots are successfully rendered and persisted as PNG files."""
     df, trainer = trained_pipeline
 
+    # ==========================================
+    # TYPE NARROWING VIA TEST ASSERTIOMS (THE FIX)
+    # ==========================================
+    # These native assertions prove to the type checker that the underlying model instances
+    # are physically instantiated and not None before passing them down to plotting routines.
+    assert trainer.simple_linear_model is not None, "Simple linear model training payload failed to initialize."
+    assert trainer.multiple_linear_model is not None, "Multiple linear model training payload failed to initialize."
+    assert trainer.logistic_model is not None, "Logistic classification engine payload failed to initialize."
+
     # Passes tmp_path fixture to isolate generated artifacts during test runs
     visualizer = ModelVisualizerLayer(data=df, output_dir=tmp_path)
 
-    # Triggers plot generation methods
+    # Triggers plot generation methods with guaranteed type-safe initialized inputs
     visualizer.generate_case1_plot(trainer.simple_linear_model, 0.85)
     visualizer.generate_case2_plot(trainer.multiple_linear_model, 0.90)
     visualizer.generate_case3_plot(trainer.logistic_model, 0.95)

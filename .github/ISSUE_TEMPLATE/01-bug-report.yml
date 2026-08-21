@@ -1,0 +1,104 @@
+name: '🐛 Bug Report'
+description: 'Report a reproducible defect in code, tooling, CI, security, or machine learning behavior.'
+title: '[BUG] '
+labels:
+  - bug
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Bug Report
+
+        Use this form to report a reproducible defect affecting the repository,
+        development tooling, CI/CD pipelines, security controls, data processing,
+        machine learning behavior, or generated outputs.
+
+        **Do not disclose secrets, credentials, API keys, tokens, private data,
+        or unredacted security vulnerabilities in this public issue.**
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 'Pre-submission checks'
+      description: 'Confirm the basic triage requirements before submitting the issue.'
+      options:
+        - label: 'I searched existing issues and did not find a duplicate.'
+          required: true
+        - label: 'I removed secrets, credentials, tokens, and other sensitive information from this report.'
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 'Observed Behavior'
+      description: 'Describe what is currently happening, including the affected component or workflow.'
+      placeholder: |
+        Describe the observed behavior.
+
+        Example:
+        `pnpm lint:check:all` fails during ESLint execution with a configuration error.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 'Expected Behavior'
+      description: 'Describe what should have happened instead.'
+      placeholder: |
+        Describe the expected behavior.
+
+        Example:
+        The repository quality gate should complete successfully without ESLint configuration errors.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 'Reproduction Steps'
+      description: 'Provide the minimum deterministic sequence required to reproduce the problem.'
+      placeholder: |
+        1. Run `pnpm infra:script:setup`.
+        2. Run `pnpm lint:check:all`.
+        3. Observe the failure.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 'Console Output / Stack Trace'
+      description: 'Paste the relevant terminal output exactly as produced. Remove secrets and sensitive information.'
+      placeholder: 'Paste relevant ESLint, Ruff, Bandit, Semgrep, Gitleaks, pytest, Act, or GitHub Actions output here.'
+      render: text
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: 'Environment'
+      description: 'Provide the relevant operating system and toolchain versions.'
+      placeholder: 'macOS 26.x, Python 3.12.x, Node.js 24.14.0, pnpm 11.22.0, uv x.x.x, Docker x.x.x'
+    validations:
+      required: true
+
+  - type: input
+    id: affected_component
+    attributes:
+      label: 'Affected Component'
+      description: 'Identify the affected file, directory, workflow, package, or project.'
+      placeholder: 'e.g. .github/workflows/ci.yml, eslint.config.mjs, projects/.../case-byd'
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: 'Additional Context'
+      description: 'Add relevant configuration, recent changes, screenshots, references, or other diagnostic information.'
+      placeholder: 'Provide any additional context that may help reproduce or diagnose the issue.'
+    validations:
+      required: false

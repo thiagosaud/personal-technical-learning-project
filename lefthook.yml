@@ -1,40 +1,60 @@
-# Lefthook Git Hook Management Engine Orchestration
-# Reference: https://github.com
+# Lefthook Git Hooks Configuration
+# Official Documentation: https://lefthook.dev/configuration/
+# Repository-level Git hooks for local development and commit quality gates.
 
 pre-commit:
   parallel: false
   commands:
-    gitleaks-audit:
-      tags: security
-      run: npx gitleaks-secret-scanner detect --verbose --redact
-    prettier-format:
-      glob: '*.{json,md,yaml,yml,mjs,js}'
-      run: pnpm run format:js
+    # 1. APPLICATION FORMATTING MATRIX
+    format-all-files:
+      glob: '*.{js,mjs,cjs,ts,tsx,json,md,yaml,yml}'
+      run: pnpm exec prettier --write {staged_files}
       stage_fixed: true
-    ruff-format:
+
+    format-code-python:
       glob: '*.py'
-      run: pnpm run format:py
+      run: pnpm exec ruff format {staged_files}
       stage_fixed: true
-    ruff-lint:
-      glob: '*.py'
-      run: pnpm run lint:code:py
-    eslint-lint:
+
+    # 2. AUTOMATED CODE QUALITY FIXERS (Enforces stage_fixed on autofixes)
+    # Native markdown quick-fix engine via markdownlint
+    fix-code-markdown:
+      glob: '*.{md}'
+      run: pnpm exec markdownlint {staged_files} --fix
+
+    # Native javascript quick-fix engine via eslint
+    fix-code-javascript:
       glob: '*.{js,mjs,cjs,ts,tsx}'
-      run: pnpm exec eslint {staged_files} --max-warnings 0
+      run: pnpm exec eslint {staged_files} --fix
+
+    # Native python quick-fix engine via ruff
+    fix-code-python:
+      glob: '*.py'
+      run: pnpm exec ruff check {staged_files} --fix
 
 commit-msg:
   commands:
+    # 3. COMMIT MESSAGES CONVENTIONAL FORMAT LINT GATE
     commitlint:
-      run: pnpm run lint:commit
+      run: pnpm lint:check:commit
 
 pre-push:
   parallel: true
   commands:
-    validate-branch:
-      run: pnpm run lint:branch
-    semgrep-sast:
-      run: pnpm run lint:security:semgrep
-    bandit-sast:
-      run: pnpm run lint:security:py
-    python-tests:
-      run: pnpm run test:py
+    # 4. GLOBAL QUALITY GATEWAY RULES (Executed in parallel before code pushes upstream)
+    # Synced exactly with your hardened semantic package.json production targets
+    audit-branchname:
+      tags: security
+      run: pnpm pnpm lint:check:branchname
+
+    audit-sast:
+      tags: security
+      run: pnpm test:sast:all
+
+    audit-unit-test-covarage:
+      tags: security
+      run: pnpm test:unit:all
+
+    audit-lint:
+      tags: security
+      run: pnpm lint:check:all

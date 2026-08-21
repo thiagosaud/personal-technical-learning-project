@@ -1,8 +1,14 @@
-name: Global Security & Vulnerability Scheduled Audit
+name: 'SECURITY SCHEDULE WORKFLOW'
 
 on:
   schedule:
-    - cron: '0 2 * * *' # Executes automatically every single night at 02:00 AM UTC
+    - cron: '0 2 * * *'
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,40 +21,79 @@ jobs:
   nightly_security_scan:
     name: Deep Vulnerability Scan Execution
     runs-on: ubuntu-latest
+
     steps:
+      # ==========================================
+      # 1. ENVIRONMENT
+      # ==========================================
+
       - name: Checkout Source Context
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # Enforces full history tracking for historical patch parsing
+          fetch-depth: 0
 
-      - name: Enterprise Secret Detection Sweep (Gitleaks v3 Active Specification)
-        uses: gitleaks/gitleaks-action@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure Git Identity
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Setup Node Runtime (Stable LTS Layer)
+      - name: Setup Node Runtime
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Enable Corepack & Pre-fetch Pinned Package Manager
+        shell: bash
         run: |
           corepack enable
           corepack prepare pnpm@11.22.0 --activate
+          pnpm --version
+
+      - name: Configure PNPM Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Provision Node Packages
-        run: pnpm install --frozen-lockfile
+        run: pnpm infra:install:global:workspace:dependencies
+
+      # ==========================================
+      # 2. PYTHON SECURITY TOOLCHAIN
+      # ==========================================
 
       - name: Setup UV Environment Tooling
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          version: 'latest'
+          version: latest
 
-      - name: Sync Production Environment Dependencies
-        run: uv sync --frozen
+      - name: Sync Global Root Development Tools
+        env:
+          UV_LINK_MODE: copy
+        run: pnpm infra:install:global:python:dependencies
 
-      - name: Full SAST Deep Audit (Semgrep & Bandit Comprehensive)
-        run: |
-          pnpm run lint:security:semgrep
-          pnpm run lint:security:py
+      # ==========================================
+      # 3. SAST GATES
+      # ==========================================
+
+      - name: Run Full SAST Security Matrix
+        run: pnpm test:sast:all
+
+      # ==========================================
+      # 4. QUALITY
+      # ==========================================
+
+      - name: Execute Unified Monorepo Quality Matrix Verification
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: pnpm lint:check:all
+
+      # ==========================================
+      # 5. TESTS
+      # ==========================================
+
+      - name: Run Python Automated Unit Tests Suite
+        run: pnpm test:unit:py

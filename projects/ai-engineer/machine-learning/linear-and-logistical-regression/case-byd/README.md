@@ -3,9 +3,10 @@
 [![Python](https://img.shields.io/badge/python-%3E%3D3.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![scikit--learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![pandas](https://img.shields.io/badge/pandas-data%20analysis-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](../../../../../../LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](../../../../../LICENSE)
 
 Educational machine learning project applied to BYD vehicle technical specifications.
+A small laboratory for applied data, models, and visualization 🤖
 
 The pipeline runs:
 
@@ -26,19 +27,29 @@ There is currently no ingestion from a CSV file, API, or database.
 The metrics are calculated using the same data used for training. Therefore,
 they do not represent a generalized evaluation on unseen data.
 
+## ⚙️ Requirements
+
+See in the [PYPROJECT](pyproject.toml).
+
+## ▶️ Usage
+
+```bash
+uv run case-byd
+```
+
+The command prints the R² and accuracy values and saves the charts in the
+current working directory.
+
 ## 🧱 Architecture
 
 ```text
 main.py
-   │
    ├── ETLLayer
    │      └── DataFrame sorted by weight
-   │
    ├── ModelTrainerLayer
    │      ├── Simple linear regression
    │      ├── Multiple linear regression
    │      └── Logistic regression
-   │
    └── ModelVisualizerLayer
           └── Three PNG charts
 ```
@@ -47,19 +58,34 @@ main.py
 
 ```text
 case-byd/
-├── config/
-│   └── schema/data/vehicle.py       # Column contract
-├── layer/
-│   ├── data/etl.py                  # Data construction and sorting
-│   ├── machine_learning/
-│   │   └── model_trainer.py         # Training and metrics
-│   └── visualizer/
-│       └── model_visualizer.py      # Charts
-├── src/case_byd/
-│   └── __init__.py
-├── main.py                          # Entry point
-├── pyproject.toml                   # Dependencies and CLI
-└── uv.lock                          # Locked dependencies
+├── README.md                                      # Project overview, architecture, scope, usage, and technical documentation
+├── CHANGELOG.md                                   # Chronological record of project changes and releases
+├── pyproject.toml                                 # Python project metadata, dependencies, tooling, and CLI configuration
+├── package.json                                   # Node.js project metadata and repository-level development scripts
+├── uv.lock                                        # Deterministic lockfile for resolved Python dependencies
+│
+├── tests/                                         # Automated test suite for validating application behavior
+│   ├── test_etl.py                                # Unit tests for dataset construction and ETL transformations
+│   ├── test_trainer.py                            # Unit tests for model training, predictions, and evaluation metrics
+│   └── test_visualizer.py                         # Unit tests for chart generation and visualization behavior
+│
+└── src/                                           # Application source code and runtime components
+    ├── main.py                                    # Application entry point that orchestrates the end-to-end ML pipeline
+    │
+    ├── config/                                    # Configuration and structural contracts used by the application
+    │   └── schema/                                # Data structure and validation definitions
+    │       └── data/                              # Domain-specific data contracts
+    │           └── vehicle.py                     # Defines the vehicle dataset schema, columns, and data types
+    │
+    └── layer/                                     # Processing layers separating data, ML, and visualization responsibilities
+        ├── data/                                  # Data preparation and transformation layer
+        │   └── etl.py                             # Builds, transforms, and prepares the vehicle dataset for modeling
+        │
+        ├── machine_learning/                      # Machine learning training and evaluation layer
+        │   └── model_trainer.py                   # Trains regression and classification models and calculates evaluation metrics
+        │
+        └── visualizer/                             # Model results and analytical visualization layer
+            └── model_visualizer.py                # Generates PNG charts for data, predictions, fitted models, and metrics
 ```
 
 ## 📋 Variables
@@ -82,48 +108,7 @@ case-byd/
 | 2    | Multiple linear regression | `WEIGHT_KG`, `POWER_CV` | `ACCELERATION_FROM_0_TO_100` | R²       |
 | 3    | Logistic regression        | `BATTERY_KWH`           | `IS_PURE_ELECTRIC`           | Accuracy |
 
-Training is implemented in
-[layer/machine_learning/model_trainer.py](layer/machine_learning/model_trainer.py).
-
-## ⚙️ Requirements
-
-- Python `3.12` or later
-- uv
-- pandas
-- NumPy
-- scikit-learn
-- Matplotlib
-- adjustText
-
-## 🚀 Installation
-
-Run from this directory:
-
-```bash
-uv sync --frozen
-```
-
-To install the BYD project's dependencies from the monorepo root:
-
-```bash
-cd projects/ai-engineer/machine-learning/linear-and-logistical-regression/case-byd
-uv sync --frozen
-```
-
-## ▶️ Usage
-
-```bash
-uv run python main.py
-```
-
-You can also use the CLI command declared by the project:
-
-```bash
-uv run case-byd
-```
-
-The command prints the R² and accuracy values and saves the charts in the
-current working directory.
+Training is implemented in [layer/machine_learning/model_trainer.py](layer/machine_learning/model_trainer.py).
 
 ## 🖼️ Outputs
 
@@ -134,23 +119,3 @@ current working directory.
 | `byd_case3_logistic.png`        | Estimated probability of an electric vehicle |
 
 The PNG files are locally generated artifacts.
-
-## 🔍 Quality
-
-From the monorepo root:
-
-```bash
-pnpm run lint:code:py
-pnpm run lint:security:py
-pnpm run lint:security:semgrep
-pnpm run test:py
-```
-
-## 📄 License
-
-This project follows the MIT license defined in the
-[root repository](../../../../../../LICENSE).
-
----
-
-A small laboratory for applied data, models, and visualization 🤖

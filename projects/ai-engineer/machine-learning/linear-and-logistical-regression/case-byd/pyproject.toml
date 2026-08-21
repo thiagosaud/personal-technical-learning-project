@@ -8,6 +8,7 @@ authors = [
     { name = "THIAGO SAUD", email = "126628718+thiagosaud@users.noreply.github.com" },
 ]
 
+# Dedicated third-party data science frameworks isolated strictly within this project context
 dependencies = [
     "adjusttext>=1.4.0",
     "matplotlib>=3.11.1",
@@ -20,16 +21,17 @@ dependencies = [
 [dependency-groups]
 dev = []
 
-# Define o comando CLI local para executar o pipeline de machine learning direto via terminal
+# Maps the CLI entrypoint dynamically to the package orchestration layer
 [project.scripts]
 case-byd = "src.main:main"
 
-# Utiliza o moderno e ultra-rápido motor de build nativo da Astral para empacotamento
+# Leverages the fast Rust-backed Hatchling packaging engine natively integrated with uv
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
+# Maps the specific target source directory to prevent global namespace collisions
 packages = ["src"]
 
 [tool.ruff]
@@ -39,5 +41,10 @@ src = ["src"]
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
 
+# ============================================================
+# LOCAL SUBPROJECT PYTEST INTEGRATION MATRIX
+# ============================================================
 [tool.pytest.ini_options]
-pythonpath = ["."]
+# Explicitly registers both the base and source paths to protect absolute and relative import hooks
+pythonpath = [".", "src"]
+testpaths = ["tests"]

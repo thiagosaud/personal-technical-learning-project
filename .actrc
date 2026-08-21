@@ -1,0 +1,11 @@
+# act Local GitHub Actions Runner Configuration
+# Official Documentation: https://nektosact.com/usage/index.html
+# Default act execution flags for local workflow testing.
+
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+--container-architecture linux/amd64
+--artifact-server-addr 0.0.0.0
+--artifact-server-port 34567
+--artifact-server-path "$PWD/.act/artifacts"
+--rebuild
+--rm

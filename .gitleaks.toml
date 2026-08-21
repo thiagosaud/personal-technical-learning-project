@@ -1,19 +1,22 @@
-# Gitleaks Configuration — Enterprise Secret Scanning Protection
-# Reference: https://github.com
+# Gitleaks Secret Detection Configuration
+# Official Documentation: https://github.com/gitleaks/gitleaks
+# Repository-level configuration for secret detection and scanning rules.
 
-title = "Global Monorepo Secret Scanning Guardrails"
+# ============================================================
+# 1. EXTEND THE OFFICIAL ENTERPRISE BASELINE PRESETS
+# ============================================================
+# This inherits hundreds of hyper-optimized, high-performance rules
+# curated by the global security community to block active cloud credentials
+# (AWS, GitHub Tokens, Stripe, SSH keys, Google Cloud, etc.) natively.
+[extend]
+useDefault = true
 
-[[rules]]
-    id = "generic-api-private-key"
-    description = "Detect high-entropy generic credentials, key pairs, and private data arrays"
-    regex = '''(?i)(key|api|token|secret|password|passwd)[-|_| ]*[= | :][ "']*[a-zA-Z0-9-_\.\~]{20,}[ "']*'''
-    entropy = 3.5
-    keywords = ["key", "api", "token", "secret", "password"]
-
+# ============================================================
+# 2. GLOBAL WORKSPACE ALLOWLIST (False Positive Mitigation)
+# ============================================================
 [allowlist]
-    description = "Global structural infrastructure exceptions for cache and package trees"
-    paths = [
-        '''(?i)(^|/)node_modules/''',
-        '''(?i)(^|/)\.pnpm-store/''',
-        '''(?i)(^|/)\.venv/'''
-    ]
+description = "Global structural infrastructure exceptions for package trees"
+
+# Specific safe configuration and mapping files that inherently contain
+# high-entropy integrity hashes or crypto signatures causing false-positives.
+paths = ["pnpm-lock.yaml", "package.json", "eslint.config.mjs"]

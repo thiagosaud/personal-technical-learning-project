@@ -7,10 +7,10 @@
 
 ## 🔍 Engineering Verification Checklist
 
-- [ ] Local checks passed via running `pnpm run lint:all:fix`
-- [ ] Security scanners executed cleanly via `pnpm run security:secrets`
-- [ ] Python unit testing suite cleared via `pnpm run test:py`
-- [ ] Local CI pipeline fully validated via `pnpm run ci:local:all`
+- [ ] Local quality checks passed cleanly via executing `pnpm lint:check:all`
+- [ ] Security scanners executed with zero leaks via `pnpm test:sast:secrets`
+- [ ] Python unit testing suite cleared successfully via `pnpm test:py`
+- [ ] Local GitHub Actions CI pipeline fully validated via `pnpm test:ci:local:all`
 
 ## 💡 Summary of Changes
 

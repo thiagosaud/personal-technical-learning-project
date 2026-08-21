@@ -1,14 +1,24 @@
-# Dependencies
+# Global Monorepo Prettier Ignore Architecture
+# Official Reference: https://prettier.io
+
+# ============================================================
+# 1. THIRD-PARTY DEPENDENCIES
+# ============================================================
 node_modules/
 .pnpm-store/
 
-# Build output
+# ============================================================
+# 2. BUILD AND COMPILATION OUTPUT TARGETS
+# ============================================================
 .next/
 out/
 dist/
 build/
 
-# Coverage / test output
+# ============================================================
+# 3. COVERAGE AND SAST SECURITY REPORTS
+# ============================================================
+htmlcov/
 coverage/
 .nyc_output/
 .vitest/
@@ -16,41 +26,54 @@ test-results/
 playwright-report/
 blob-report/
 
-# Python
-.venv/
-__pycache__/
+# ============================================================
+# 4. PYTHON RUNTIMES AND VIRTUAL ENVIRONMENTS
+# ============================================================
+.venv*/
+**/__pycache__/**
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 
-# ML
-mlruns/
-.mlruns/
-.mlflow/
-artifacts/
-models/
+# ============================================================
+# 5. ML / MLOPS TELEMETRY STORAGE (Root locked)
+# ============================================================
+/mlruns/
+/.mlruns/
+/.mlflow/
+/artifacts/
+/models/
 
-# Generated / temporary
+# ============================================================
+# 6. SYSTEM LOGS AND TEMPORARY RUN PACKS
+# ============================================================
 tmp/
 temp/
 .cache/
+*.log
 
-# Lockfiles
-pnpm-lock*.yaml
+# ============================================================
+# 7. PYTHON ECOSYSTEM EXTERNAL LOCKFILES
+# ============================================================
+# Prettier ignores pnpm-lock.yaml implicitly; we explicitly declare uv.lock
 uv.lock
 
-# Generated files
+# ============================================================
+# 8. GENERATED METADATA AND COMPILED ARTIFACTS
+# ============================================================
 apps/web/next-env.d.ts
 *.min.js
 *.min.css
 *.map
 
-# IDE
+# ============================================================
+# 9. IDE WORKSPACES AND VCS METADATA
+# ============================================================
 .idea/
 .vscode/
-
-# Git
 .git/
 
-# Docker generated data
+# ============================================================
+# 10. DEVOPS AND DEPLOYMENT VOLUMES
+# ============================================================
 docker-data/

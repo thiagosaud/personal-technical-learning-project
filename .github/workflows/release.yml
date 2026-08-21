@@ -69,14 +69,6 @@ jobs:
           commit-message: 'chore(release): version packages'
           pr-title: 'chore(release): version packages'
           pr-base-branch: main
+          create-github-releases: true
+          push-git-tags: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # ==========================================
-      # 6. REPOSITORY RELEASE
-      # ==========================================
-
-      - name: Create Repository Release
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bash ./scripts/create-repository-release.sh

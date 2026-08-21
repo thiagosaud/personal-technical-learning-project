@@ -20,6 +20,7 @@ build/
 # ============================================================
 htmlcov/
 coverage/
+.coverage*
 .nyc_output/
 .vitest/
 test-results/

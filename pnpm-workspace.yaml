@@ -3,6 +3,7 @@
 
 # Target paths containing valid subprojects/workspaces with individual package.json descriptors
 packages:
+  - '.'
   - 'projects/**'
 
 # Security policies against dependency poisoning and supply chain attacks

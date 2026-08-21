@@ -58,7 +58,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # ==========================================
-      # 5. CHANGESETS
+      # 5. CHANGESETS RELEASE PR
       # ==========================================
 
       - name: Create or Update Release Pull Request
@@ -69,6 +69,4 @@ jobs:
           commit-message: 'chore(release): version packages'
           pr-title: 'chore(release): version packages'
           pr-base-branch: main
-          create-github-releases: true
-          push-git-tags: true
           github-token: ${{ secrets.GITHUB_TOKEN }}

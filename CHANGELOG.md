@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- ed537ac: TEST 1 ROOT
+
 ## 2.0.0
 
 ### Major Changes

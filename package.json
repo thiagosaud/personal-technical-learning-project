@@ -56,6 +56,7 @@
     "infra:release:changeset:pre-enter": "pnpm infra:release:changeset pre enter rc",
     "infra:realease:changeset:pre-exit": "pnpm infra:release:changeset pre exit",
     "infra:release:changeset:version:packages": "pnpm infra:release:changeset version",
+    "infra:release:changeset:publish:packages": "pnpm build && changeset publish",
     "infra:test:workflow:ci": "act pull_request -W .github/workflows/ci.yml",
     "infra:test:workflow:security-schedule": "act schedule -W .github/workflows/security-schedule.yml",
     "format:files": "prettier --write .",

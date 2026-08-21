@@ -1,4 +1,6 @@
-/** @type {import("prettier").Config} */
+/**
+@type {import("prettier").Config}
+*/
 const config = {
   semi: true,
   trailingComma: 'es5',

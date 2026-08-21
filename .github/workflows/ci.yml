@@ -55,7 +55,7 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.head_ref }}
         run: |
-          pnpm run lint:branch:ci
+          pnpm run script:lint:branch:ci
 
       - name: Run Markdown Compliance Checks
         run: pnpm run lint:markdown

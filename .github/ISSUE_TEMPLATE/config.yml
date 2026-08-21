@@ -1,9 +1,10 @@
-# Global Issue Configuration Schema Override
-# Reference: https://github.com
-
 blank_issues_enabled: false
 
 contact_links:
-  - name: '🚨 Report a Security Vulnerability'
-    url: 'https://github.com/thiagosaud/personal-technical-learning-project/issues'
-    about: 'If you discovered a security vulnerability or critical secret exposure leak, submit a private report natively here.'
+  - name: '🚨 Private Security Advisory'
+    url: 'https://github.com/thiagosaud/personal-technical-learning-project/security/advisories/new'
+    about: 'Report security vulnerabilities privately. Do not disclose credentials, secrets, or exploit details through public issues.'
+
+  - name: '📚 Repository Documentation'
+    url: 'https://github.com/thiagosaud/personal-technical-learning-project'
+    about: 'Review the repository documentation, README, CONTRIBUTING.md, and SECURITY.md before opening an issue.'

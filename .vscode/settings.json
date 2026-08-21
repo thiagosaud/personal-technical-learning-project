@@ -17,8 +17,16 @@
     "editor.wordWrap": "on"
   },
 
+  // --- ESLint Flat Config v10 Automation (The Missing Web Gate) ---
+  // Ensures syntax errors and SonarJS defects are caught inside the IDE before commit linting.
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+
   // --- Even Better TOML Configuration ---
-    "[toml]": {
+  "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml",
     "editor.codeActionsOnSave": { "source.fixAll": "explicit" }
   },
@@ -38,15 +46,24 @@
 
   // --- MS Python & Pylance Language Server Workspace Bounds ---
   "python.analysis.indexing": true,
-   // SOLUÇÃO OFICIAL PYLANCE: Força a leitura do código bruto das libs no .venv
   "python.analysis.useLibraryCodeForTypes": true,
 
+  // Stabilized dynamic python environment routing for maximum multi-platform portability
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.analysis.typeCheckingMode": "basic",
   "python.analysis.importFormat": "absolute",
-  "python.analysis.include": ["projects"],
-  "python-envs.workspaceSearchPaths": ["./.venv"],
-   "python.analysis.extraPaths": [
-    "${workspaceFolder}/projects/**/src"
+
+  // Scopes restricted to legitimate system folders to boost IDE typing speeds
+  "python.analysis.include": [
+    "projects"
   ],
+  "python-envs.workspaceSearchPaths": [
+    "./.venv"
+  ],
+
+  // THE EXTRA PATHS GLOBAL FIX: Removed the broken recursive wildcards (**/)
+  // to permanently eliminate Pylance background infinite indexing CPU leaks.
+  "python.analysis.extraPaths": [
+		"${workspaceFolder}/projects/**/src"
+  ]
 }

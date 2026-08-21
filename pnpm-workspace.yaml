@@ -1,9 +1,8 @@
-# PNPM Workspace Configuration Engine
-# Reference: https://pnpm.io
+# Global Monorepo Workspace Distribution Layer
+# Official Documentation Reference: https://pnpm.io
 
-# Dynamically maps the real folders of your monorepo ecosystem
+# Target paths containing valid subprojects/workspaces with individual package.json descriptors
 packages:
-  - '.'
   - 'projects/**'
 
 # Security policies against dependency poisoning and supply chain attacks

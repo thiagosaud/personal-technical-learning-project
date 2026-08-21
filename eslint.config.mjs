@@ -1,3 +1,7 @@
+// ESLint Flat Configuration
+// Official Documentation: https://eslint.org/docs/latest/use/configure/configuration-files
+// Project-wide ESLint configuration for the monorepo.
+
 // @ts-check
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -20,6 +24,7 @@ export default defineConfig([
   // ==========================================
   // 1. GLOBAL IGNORES
   // ==========================================
+  // Enforces clean optimization boundaries by explicitly ignoring machine caches
   {
     ignores: [
       '**/node_modules/**',
@@ -27,13 +32,17 @@ export default defineConfig([
       '**/build/**',
       '**/out/**',
       '**/.venv/**',
+      '**/htmlcov/**',
       '**/coverage/**',
       '**/.next/**',
+      '**/.uv/**',
+      '**/.ruff_cache/**',
+      '**/.pytest_cache/**',
     ],
   },
 
   // ==========================================
-  // 2. THIRD-PARTY PLUGINS & PRESETS
+  // 2. THIRD-PARTY PLUGINS & PRESETS BASELINE
   // ==========================================
   js.configs.recommended,
 
@@ -55,10 +64,8 @@ export default defineConfig([
   ),
 
   // ==========================================
-  // 3. TYPESCRIPT ENVIRONMENT PRESETS (Strictly bound to TS files)
+  // 3. TYPESCRIPT ENVIRONMENT PRESETS
   // ==========================================
-  // By isolating strict type rule injection to TS_FILES only, we completely
-  // eliminate the projectService parsing engine loop crashes on loose config files.
   ...tseslint.configs.strictTypeChecked.map((config) => ({
     ...config,
     files: TS_FILES,
@@ -69,7 +76,7 @@ export default defineConfig([
   })),
 
   // ==========================================
-  // 4. SHARED PROJECT APPLICATION RULES (Universal)
+  // 4. SHARED PROJECT APPLICATION RULES (Universal Framework Layer)
   // ==========================================
   {
     files: ALL_JS_AND_TS_FILES,
@@ -97,7 +104,7 @@ export default defineConfig([
   },
 
   // ==========================================
-  // 5. TYPESCRIPT ONLY COMPILER SERVICE
+  // 5. TYPESCRIPT SYSTEM ONLY COMPILER SERVICE
   // ==========================================
   {
     files: TS_FILES,
@@ -117,8 +124,10 @@ export default defineConfig([
   },
 
   // ==========================================
-  // 6. AUTOMATION SCRIPTS OVERRIDES (Safe Execution Layer)
+  // 6. AUTOMATION SCRIPTS OVERRIDES (Strict Execution Layer)
   // ==========================================
+  // Placed lower down the stack chain matrix to guarantee absolute precedence
+  // over conflicting layers injected by core framework presets.
   {
     files: [
       'scripts/**/*.{js,mjs,cjs}',
@@ -126,6 +135,7 @@ export default defineConfig([
       '*.config.{js,mjs,cjs}',
       '**/*.config.{js,mjs,cjs}',
       '.prettierrc.mjs',
+      'commitlint.config.mjs',
     ],
     rules: {
       'unicorn/no-process-exit': 'off',

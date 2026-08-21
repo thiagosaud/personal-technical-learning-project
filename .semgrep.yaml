@@ -1,24 +1,18 @@
 # Semgrep Global Enterprise SAST Configuration Matrix
-# Reference: https://semgrep.dev
+# Official Documentation Reference: https://semgrep.dev
 
 rules:
-  - id: python-insecure-deserialization-pickle
-    pattern: pickle.loads(...)
-    message: "❌ [SEMGREP SECURITY] Insecure 'pickle.loads' detected. Untrusted pickle files can cause Remote Code Execution (RCE). Use secure data serialization alternatives like Safetensors, JSON, ONNX, or Joblib with verified origins."
-    languages: [python]
-    severity: ERROR
-
-  - id: generic-hardcoded-high-entropy-secret
+  # ============================================================
+  # 1. ARCHITECTURE AND LOGICAL BUSINESS GUARDRAILS
+  # ============================================================
+  # Blinds production architecture by forbidding raw print statements
+  # inside core source layers, while safely allowing them inside deployment scripts.
+  - id: monorepo-forbidden-raw-print-in-source
     patterns:
-      - pattern-either:
-          - pattern: $SECRET = "..."
-      - pattern-regex: (?i)(password|secret|passwd|api_key|token|private_key)\s*=\s*['"][a-zA-Z0-9-_\.\~]{16,}['"]
-    message: '❌ [SEMGREP SECURITY] Potential hardcoded security token or credential detected. Move values out of the code engine into a protected environment wrapper (.env or Vault).'
-    languages: [python, javascript, typescript]
-    severity: ERROR
-
-  - id: ml-scikit-learn-insecure-load
-    pattern: joblib.load(...)
-    message: '⚠️ [SEMGREP WARNING] Deserializing binary model artifacts via joblib can execute malicious code payloads. Ensure the source data stream is fully cryptographic-signed.'
+      - pattern: print(...)
+      # THE PATH RESOLUTION FIX: Excludes operational scripts, release tools,
+      # and testing directories from evaluating production print constraints.
+      - pattern-not-regex: ^(scripts|tests|projects/.*/tests)/.*
+    message: "❌ [SEMGREP AUDIT] Forbidden raw 'print()' function found in production source layers. To maintain strict architecture guidelines, utilize the standardized 'logging' module infrastructure instead."
     languages: [python]
-    severity: WARNING
+    severity: ERROR

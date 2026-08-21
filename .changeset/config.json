@@ -1,6 +1,6 @@
 {
   "changelog": ["@changesets/cli/changelog", { "repo": "thiagosaud/personal-technical-learning-project" }],
-  "commit": false,
+  "commit": true,
   "fixed": [],
   "linked": [],
   "access": "restricted",

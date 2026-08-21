@@ -1,3 +1,7 @@
+# Python Project Configuration
+# Official Documentation: https://packaging.python.org/en/latest/specifications/pyproject-toml/
+# Central Python project metadata, dependency and tooling configuration.
+
 [project]
 name = "personal-technical-learning-project"
 version = "0.1.0"
@@ -6,12 +10,13 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [] # Kept empty at the root to ensure isolation. Real dependencies go on subprojects.
 
-# Global group of Python development tools stuck by root version.
+# Global group of Python development tools stuck by root version
 [dependency-groups]
 dev = [
     "bandit==1.8.2",
     "pytest==8.3.4",
     "pytest-srcpaths>=0.1.0",
+    "pytest-cov>=6.0.0",
     "ruff==0.16.3",
     "semgrep>=1.173.0",
 ]
@@ -20,7 +25,9 @@ dev = [
 managed = true # Configures the global root to act in uv workspace mode in case new Python packages appear.
 
 [tool.uv.workspace]
-members = ["projects/**/case-byd"] # Dynamically discovers all subprojects in the monorepo.
+# THE UV WORKSPACE FIXED GLOB: Recursively traverses deep multi-layer directory trees
+# to discover valid Python subprojects without crashing on intermediate boilerplate folders.
+members = ["projects/**/case-byd"]
 
 [tool.ruff]
 target-version = "py312"
@@ -38,49 +45,49 @@ exclude = [
     ".next",
 ]
 
-# Strict selection of rules for resilient corporate environments.
+# Strict selection of rules for resilient corporate environments
 [tool.ruff.lint]
 select = [
-    # --- Seus grupos originais mantidos ---
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # Pyflakes (Erros de sintaxe e variáveis não usadas)
-    "I",   # isort (Ordenação automática e limpa de imports)
-    "B",   # flake8-bugbear (Design de código incorreto e armadilhas lógicas)
-    "C4",  # flake8-comprehensions (Otimização de performance em loops/lists)
-    "UP",  # pyupgrade (Garante uso de recursos nativos modernos do Python 3.12)
-    "SIM", # flake8-simplify (Legibilidade de expressões lógicas complexas)
-    "C90", # Complexidade ciclomática (Garante que nenhuma função vire um "monstro")
-    "S",   # flake8-bandit (Análise estática de segurança nativa do ecossistema)
-
-    # --- Expansão para Nível de Produção Avançado ---
-    "ASYNC", # flake8-async (Crucial para FastAPI/LlamaIndex: evita travar o loop de eventos)
-    "ANN",   # flake8-annotations (Força Type Hinting estrito como fizemos no TypeScript)
-    "A",     # flake8-builtins (Impede sobrescrever palavras reservadas do Python como id, list, type)
-    "T20",   # flake8-print (Banir comandos print() em produção; força o uso de Logging)
-    "PT",    # flake8-pytest-style (Garante que os testes sigam o padrão corporativo unificado)
-    "ARG",   # flake8-unused-arguments (Garante que funções não declarem parâmetros inúteis)
-    "PTH",   # flake8-use-pathlib (Força o uso da biblioteca moderna Pathlib em vez do antigo os.path)
-    "PERF",  # Perflint (Regras focadas puramente em gargalos de performance no Python)
-    "RUF",   # Regras nativas exclusivas do próprio Ruff (Prevenção de bugs ocultos)
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # Pyflakes (Syntax errors and unused variables)
+    "I",     # isort (Automated import sorting and clean layout)
+    "B",     # flake8-bugbear (Incorrect code design patterns and logical traps)
+    "C4",    # flake8-comprehensions (Performance optimizations in list/dict loops)
+    "UP",    # pyupgrade (Forces modern native features of Python 3.12)
+    "SIM",   # flake8-simplify (Code readability enhancements for logic expressions)
+    "C90",   # McCabe Cyclomatic Complexity (Guarantees functions do not become unmaintainable)
+    "S",     # flake8-bandit (Native security analysis baseline within ruff engine)
+    "ASYNC", # flake8-async (Prevents event-loop blockages across async codebases)
+    "ANN",   # flake8-annotations (Enforces strict type hinting syntax rules)
+    "A",     # flake8-builtins (Prevents overshadowing Python reserved keywords)
+    "T20",   # flake8-print (Bans print() in production; enforces explicit logger streaming)
+    "PT",    # flake8-pytest-style (Enforces enterprise formatting standards over test files)
+    "ARG",   # flake8-unused-arguments (Ensures routines do not carry redundant parameters)
+    "PTH",   # flake8-use-pathlib (Enforces the modern Pathlib module over legacy os.path)
+    "PERF",  # Perflint (Dedicated rules explicitly capturing performance overhead targets)
+    "RUF",   # Exclusive native Ruff checks to block hidden architectural defects
 ]
 
 ignore = [
-    "ANN401", # Dynamically typed expressions (Any) are disallowed (Permitido quando estritamente necessário)
-    "S101",   # Use of `assert` detected (Precisamos ignorar globalmente aqui para permitir nos testes, trataremos abaixo)
+    "ANN401", # Dynamically typed expressions (Any) are allowed where strictly valid
+    "S101",   # Handled granularly via per-file-ignores configuration to protect production paths
 ]
 
-# 3. REGRAS DE COMPLEXIDADE (Nível Sonar)
+# McCabe Complexity Parameters
 [tool.ruff.lint.mccabe]
-# Máximo de caminhos lógicos por função antes de quebrar o build
 max-complexity = 15
 
-# Ignores assertions or prints checks only in local test files
+# ============================================================
+# RUFF PER-FILE OVERRIDES (THE SINTAX FIX)
+# ============================================================
+# Compliant structured table layout aligned with modern Astral specification requirements.
+# Selectively unblocks strict execution layers solely over target test files.
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**/*.py" = [
-    "S101",   # Permite o uso de 'assert' (obrigatório em testes com Pytest)
-    "T201",   # Permite 'print' em logs de teste se necessário
-    "ANN201", # Desobriga o tipo de retorno em funções de teste (Ex: def test_api():)
+    "S101",   # Allows 'assert' statements natively required by Pytest test suites
+    "T201",   # Allows temporary 'print' logging outputs inside test outputs
+    "ANN201", # Disables mandatory return typing over test execution points (e.g. def test_suite():)
 ]
 
 [tool.ruff.format]
@@ -89,9 +96,15 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
 
+# ============================================================
+# PYTEST RUNTIME CONFIGURATION MATRIX (THE RESOURCE FIX)
+# ============================================================
 [tool.pytest.ini_options]
 minversion = "8.0"
-addopts = "-v -ra --import-mode=importlib" # Adds execution flags: -v (verbal/detailed) and -ra (shows summary of failed/clean tests).
+# Enforces verbal validation logs and prints failed test summary architectures instantly
+addopts = "-v -ra --import-mode=importlib --cov=projects --cov-report=term-missing --cov-report=html --cov-fail-under=95"
+
+# Fixed path resolution parameters: Pytest relies on relative directory trees,
 srcpaths = ["projects/**"]
 testpaths = ["projects"]
-norecursedirs = ["node_modules", ".venv", ".git", "dist", "build", ".cache"] # Forces the pytest to ignore infrastructure and cache folders to optimize the scanning speed
+norecursedirs = ["node_modules", ".venv", ".git", "dist", "build", ".cache"]

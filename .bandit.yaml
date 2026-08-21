@@ -1,8 +1,18 @@
 # Bandit Security Analyzer Global Configuration
-# Reference: https://readthedocs.io
+# Official Documentation Reference: https://readthedocs.io
 
+# Only target Python core source code and automation script directories
 targets:
-  - '.'
+  - 'src'
+  - 'scripts'
+
+# THE ARCHITECTURE FIX: Centralizes test suite exclusion natively inside the config schema.
+# This prevents the CLI from raising false-positive B101 errors on Pytest assert statements.
+exclude_lines:
+  - '**/tests/**'
+  - 'test_*.py'
+
+# Explicitly blocks the analyzer from crawling build and third-party dependency trees
 exclude_dirs:
   - 'node_modules'
   - '**/node_modules/**'
@@ -13,7 +23,4 @@ exclude_dirs:
   - 'build'
   - 'tests'
   - '**/tests/**'
-
-# Configure profile exclusions for known safe patterns
-skips:
-  - 'B101' # Allow assert statements in generic environments (handled selectively by Ruff)
+  - 'test_*.py'

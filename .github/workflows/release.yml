@@ -29,29 +29,17 @@ jobs:
           fetch-depth: 0
 
       # ==========================================
-      # 2. NODE RUNTIME
+      # 2. NODE + PNPM
       # ==========================================
+
+      - name: Enable Corepack & Configure PNPM
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.22.0 --activate
+          pnpm --version
 
       - name: Setup Node Runtime
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      # ==========================================
-      # 3. PNPM
-      # ==========================================
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v6
-        with:
-          version: 11.22.0
-          run_install: false
-
-      # ==========================================
-      # 4. PNPM CACHE
-      # ==========================================
-
-      - name: Configure PNPM Cache
         uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -59,21 +47,22 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
 
       # ==========================================
-      # 5. DEPENDENCIES
+      # 3. DEPENDENCIES
       # ==========================================
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       # ==========================================
-      # 6. CHANGESETS
+      # 4. CHANGESETS
       # ==========================================
 
-      - name: Create or Update Release Pull Request
+      - name: Create or Update Changesets Release PR
         id: changesets
         uses: changesets/action@v2
         with:
           version-script: pnpm infra:release:changeset:version:packages
+          publish-script: pnpm infra:release:changeset:publish:packages
           commit-message: 'chore(release): version packages'
           pr-title: 'chore(release): version packages'
           pr-base-branch: main

@@ -6,7 +6,7 @@ Handles creating, training, and testing Machine Learning algorithms.
 import pandas as pd
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
-from config.schema.data.vehicle import VehicleSchema
+from src.config.schema.data.vehicle import VehicleSchema
 
 # Type alias combining accepted estimator types for the pipeline
 ModelEstimator = LinearRegression | LogisticRegression

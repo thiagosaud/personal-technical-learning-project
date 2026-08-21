@@ -5,7 +5,7 @@ Handles Extraction, Transformation, and Loading (ETL) tasks.
 
 import pandas as pd
 
-from config.schema.data.vehicle import VehicleSchema
+from src.config.schema.data.vehicle import VehicleSchema
 
 
 class ETLLayer:

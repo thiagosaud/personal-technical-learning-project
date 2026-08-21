@@ -2,8 +2,8 @@
 
 import pandas as pd
 
-from config.schema.data.vehicle import VehicleSchema
-from layer.data.etl import ETLLayer
+from src.config.schema.data.vehicle import VehicleSchema
+from src.layer.data.etl import ETLLayer
 
 
 def test_vehicle_schema_constants() -> None:

@@ -4,8 +4,8 @@ import pandas as pd
 import pytest
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
-from layer.data.etl import ETLLayer
-from layer.machine_learning.model_trainer import ModelTrainerLayer
+from src.layer.data.etl import ETLLayer
+from src.layer.machine_learning.model_trainer import ModelTrainerLayer
 
 
 @pytest.fixture

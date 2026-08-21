@@ -3,7 +3,6 @@
   "name": "personal-technical-learning-project",
   "version": "1.1.1",
   "license": "MIT",
-  "packageManager": "pnpm@11.22.0",
   "description": "Global corporate governance and integration pipeline layer for polyglot monorepo",
   "homepage": "https://github.com/thiagosaud/personal-technical-learning-project",
   "keywords": [],
@@ -17,6 +16,18 @@
   },
   "bugs": {
     "url": "https://github.com/thiagosaud/personal-technical-learning-project/issues"
+  },
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=24.14.0",
+    "pnpm": ">=11.22.0",
+    "uv": ">=0.12.3",
+    "docker": ">=29.7.2",
+    "ruff": ">=0.16.3",
+    "bandit": ">=1.8.2",
+    "semgrep": ">=1.174.0",
+    "pytest": ">=8.3.4",
+    "python": ">=3.12.13"
   },
   "validate-branch-name": {
     "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|release)/([a-z0-9.-]+)$",

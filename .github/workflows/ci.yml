@@ -89,6 +89,8 @@ jobs:
       - name: Execute Unified Monorepo Quality Matrix Verification
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          COMMIT_FROM_SHA: ${{ github.event.pull_request.base.sha }}
+          COMMIT_TO_SHA: ${{ github.event.pull_request.head.sha }}
         run: pnpm lint:check:all
 
       # ==========================================

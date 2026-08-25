@@ -43,8 +43,14 @@ class ModelVisualizerLayer:
 
     def __init__(self, data: pd.DataFrame, output_dir: Path | str = "") -> None:
         self.df = data
-        self.output_dir = Path(output_dir)
-        self.output_dir = Path(__file__).resolve().parents[3] / "outputs" / "figures"
+
+        if output_dir is not None and str(output_dir) != "":
+            # Se um diretório foi explicitamente fornecido (como o tmp_path dos testes), usa ele
+            self.output_dir = Path(output_dir)
+        else:
+            # Caso contrário, usa o padrão ancorado dinamicamente na pasta do case
+            self.output_dir = Path(__file__).resolve().parents[3] / "outputs" / "figures"
+
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         plt.style.use("seaborn-v0_8-whitegrid" if "seaborn-v0_8-whitegrid" in plt.style.available else "default")

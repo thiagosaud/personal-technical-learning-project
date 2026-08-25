@@ -24,7 +24,7 @@ def test_visualizer_generates_plots(trained_pipeline: tuple[pd.DataFrame, ModelT
     df, trainer = trained_pipeline
 
     # ==========================================
-    # TYPE NARROWING VIA TEST ASSERTIOMS (THE FIX)
+    # TYPE NARROWING VIA TEST ASSERTIONS
     # ==========================================
     # These native assertions prove to the type checker that the underlying model instances
     # are physically instantiated and not None before passing them down to plotting routines.
@@ -32,7 +32,7 @@ def test_visualizer_generates_plots(trained_pipeline: tuple[pd.DataFrame, ModelT
     assert trainer.multiple_linear_model is not None, "Multiple linear model training payload failed to initialize."
     assert trainer.logistic_model is not None, "Logistic classification engine payload failed to initialize."
 
-    # Passes tmp_path fixture to isolate generated artifacts during test runs
+    # Passes tmp_path fixture to isolate generated artifacts during test runs safely
     visualizer = ModelVisualizerLayer(data=df, output_dir=tmp_path)
 
     # Triggers plot generation methods with guaranteed type-safe initialized inputs
@@ -51,3 +51,13 @@ def test_visualizer_generates_plots(trained_pipeline: tuple[pd.DataFrame, ModelT
         file_path = tmp_path / filename
         assert file_path.exists(), f"Expected plot artifact {filename} was not generated."
         assert file_path.stat().st_size > 0, f"Plot artifact {filename} is empty."
+
+
+def test_visualizer_default_output_dir(trained_pipeline: tuple[pd.DataFrame, ModelTrainerLayer]) -> None:
+    """Verifies that default output_dir falls back correctly to the case path when not specified."""
+    df, _ = trained_pipeline
+    visualizer = ModelVisualizerLayer(data=df)
+
+    # Assert that it correctly mapped to the expected dynamic path structure
+    assert visualizer.output_dir.name == "figures"
+    assert visualizer.output_dir.parent.name == "outputs"

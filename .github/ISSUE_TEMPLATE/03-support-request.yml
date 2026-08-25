@@ -1,0 +1,81 @@
+name: '💬 Support Request'
+description: 'Request help with repository setup, development tooling, CI/CD, testing, or local execution.'
+title: '[SUPPORT] '
+labels:
+  - support
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💬 Support Request
+
+        Use this form for development-environment, repository tooling,
+        installation, testing, CI/CD, or local execution questions.
+
+        **Security vulnerabilities must not be reported through this form.**
+        Follow the instructions in `SECURITY.md` instead.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 'Pre-submission checks'
+      options:
+        - label: 'I searched existing issues and documentation for an existing solution.'
+          required: true
+        - label: 'I removed secrets, credentials, tokens, and other sensitive information from this report.'
+          required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 'Problem Context'
+      description: 'Describe what you are trying to accomplish and where the process is failing.'
+      placeholder: |
+        Provide enough context to understand the development task.
+
+        Example:
+        Local execution of the CI workflow through Act fails while provisioning
+        the Node.js dependencies.
+    validations:
+      required: true
+
+  - type: textarea
+    id: attempted
+    attributes:
+      label: 'What Have You Tried?'
+      description: 'List the commands, configuration changes, or troubleshooting steps already attempted.'
+      placeholder: |
+        1. Ran `pnpm infra:script:setup`.
+        2. Ran `pnpm infra:test:workflow:ci`.
+        3. Checked Docker availability.
+        4. Observed the following error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 'Console Output / Stack Trace'
+      description: 'Paste relevant terminal output. Remove secrets and sensitive information.'
+      placeholder: 'Paste relevant pnpm, uv, ESLint, Ruff, pytest, Act, Docker, or GitHub Actions output here.'
+      render: text
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: 'Environment'
+      description: 'Provide the relevant operating system and toolchain versions.'
+      placeholder: 'macOS 26.x, Python 3.12.x, Node.js 24.14.0, pnpm 11.22.0, Docker x.x.x'
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: 'Additional Context'
+      description: 'Provide links, screenshots, configuration references, or other useful information.'
+      placeholder: 'Add any information that may help reproduce or diagnose the issue.'
+    validations:
+      required: false

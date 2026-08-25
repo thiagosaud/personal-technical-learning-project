@@ -1,0 +1,18 @@
+# Semgrep Global Enterprise SAST Configuration Matrix
+# Official Documentation Reference: https://semgrep.dev
+
+rules:
+  # ============================================================
+  # 1. ARCHITECTURE AND LOGICAL BUSINESS GUARDRAILS
+  # ============================================================
+  # Blinds production architecture by forbidding raw print statements
+  # inside core source layers, while safely allowing them inside deployment scripts.
+  - id: monorepo-forbidden-raw-print-in-source
+    patterns:
+      - pattern: print(...)
+      # THE PATH RESOLUTION FIX: Excludes operational scripts, release tools,
+      # and testing directories from evaluating production print constraints.
+      - pattern-not-regex: ^(scripts|tests|projects/.*/tests)/.*
+    message: "❌ [SEMGREP AUDIT] Forbidden raw 'print()' function found in production source layers. To maintain strict architecture guidelines, utilize the standardized 'logging' module infrastructure instead."
+    languages: [python]
+    severity: ERROR

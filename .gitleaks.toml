@@ -1,0 +1,22 @@
+# Gitleaks Secret Detection Configuration
+# Official Documentation: https://github.com/gitleaks/gitleaks
+# Repository-level configuration for secret detection and scanning rules.
+
+# ============================================================
+# 1. EXTEND THE OFFICIAL ENTERPRISE BASELINE PRESETS
+# ============================================================
+# This inherits hundreds of hyper-optimized, high-performance rules
+# curated by the global security community to block active cloud credentials
+# (AWS, GitHub Tokens, Stripe, SSH keys, Google Cloud, etc.) natively.
+[extend]
+useDefault = true
+
+# ============================================================
+# 2. GLOBAL WORKSPACE ALLOWLIST (False Positive Mitigation)
+# ============================================================
+[allowlist]
+description = "Global structural infrastructure exceptions for package trees"
+
+# Specific safe configuration and mapping files that inherently contain
+# high-entropy integrity hashes or crypto signatures causing false-positives.
+paths = ["pnpm-lock.yaml", "package.json", "eslint.config.mjs"]

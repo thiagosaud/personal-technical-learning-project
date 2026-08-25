@@ -1,0 +1,30 @@
+// @ts-check
+import { RuleConfigSeverity } from '@commitlint/types';
+
+/**
+ * Global Monorepo Commit Naming Governance Engine.
+ * Official Documentation Reference: https://js.org
+ *
+ * @type {import('@commitlint/types').UserConfig}
+ */
+export default {
+  // Inherits default high-performance parameters from conventional commits guidelines
+  extends: ['@commitlint/config-conventional'],
+
+  rules: {
+    // Symmetrical validation layer synced with validate-branch-name configurations.
+    // Added 'release' type token to safeguard automatic Changeset pipeline workflows from crashing.
+    'type-enum': [
+      RuleConfigSeverity.Error,
+      'always',
+      ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore', 'ci', 'revert', 'release'],
+    ],
+
+    // Enforces strict lower-case format for commit messages to keep logs clean
+    'subject-case': [RuleConfigSeverity.Error, 'always', 'lower-case'],
+
+    // Blocks empty structural tokens across global developer workspace contexts
+    'subject-empty': [RuleConfigSeverity.Error, 'never'],
+    'type-empty': [RuleConfigSeverity.Error, 'never'],
+  },
+};

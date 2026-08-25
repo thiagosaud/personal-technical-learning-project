@@ -40,7 +40,7 @@
     "pnpm": ">=11.22.0"
   },
   "validate-branch-name": {
-    "pattern": "^(feat|fix|docs|style|perf|test|chore|ci|revert|release|refactor|changeset-release)/([a-z0-9.-]+)$",
+    "pattern": "^(main|feat|fix|docs|style|perf|test|chore|ci|revert|release|refactor|changeset-release)(/([a-z0-9.-]+))?$",
     "errorMsg": "❌ [BRANCH LINT ERROR] Branch name outside the Enterprise standard!\n💡 Use the format: <type>/<short-description-in-kebab-case>\n📌 Example: feat/linear-regression-byd\n🚀 Allowed types: feat, fix, docs, style, refactor, perf, test, chore, ci, revert, release"
   },
   "scripts": {

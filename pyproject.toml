@@ -17,7 +17,7 @@ dev = [
     "pytest==8.3.4",
     "pytest-srcpaths>=0.1.0",
     "pytest-cov>=6.0.0",
-    "ruff==0.16.3",
+    "ruff==0.16.4",
     "semgrep>=1.173.0",
 ]
 

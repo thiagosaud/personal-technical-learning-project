@@ -1,0 +1,169 @@
+# Global Monorepo Git Ignore Architecture
+# Reference: https://git-scm.com
+
+# ============================================================
+# Operating System Meta-Files
+# ============================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Desktop.ini
+
+# ============================================================
+# Editors / IDEs / Local Workspace States
+# ============================================================
+.idea/
+*.iml
+*.swp
+*.swo
+*.suo
+*.ntvs*
+.vscode/*.local.json
+.vscode/.history/
+
+# ============================================================
+# Environment Settings / Production Secrets
+# ============================================================
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ============================================================
+# Node / pnpm / Monorepo Package Layers
+# ============================================================
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+.yarn-cache/
+
+# ============================================================
+# Next.js / Compilation / Build Output Targets
+# ============================================================
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# ============================================================
+# Coverage / SAST Engine Tool Test Artifacts
+# ============================================================
+htmlcov/
+coverage/
+.coverage*
+coverage.*
+.nyc_output/
+.vitest/
+.semgrep/
+.sonar/
+test-results/
+playwright-report/
+blob-report/
+
+# ============================================================
+# Python Runtimes & Environments (The uv Fix)
+# ============================================================
+.venv*/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+
+# Core caching directory generated dynamically by Astral's uv package manager
+.uv/
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+# ============================================================
+# Python Packaging
+# ============================================================
+*.egg-info/
+.eggs/
+*.egg
+wheels/
+pip-wheel-metadata/
+
+# ============================================================
+# Jupyter
+# ============================================================
+.ipynb_checkpoints/
+
+# ============================================================
+# ML / MLOps / Heavy Binary Weights (Root locked)
+# ============================================================
+.mlflow/
+mlruns/
+.mlruns/
+wandb/
+
+# Locked to the root directory level to protect internal src/ classes and architectures
+/artifacts/
+/models/
+
+*.pt
+*.pth
+*.onnx
+*.safetensors
+
+# ============================================================
+# Docker Storage Areas
+# ============================================================
+docker-data/
+.docker/
+
+# ============================================================
+# Terraform / Infrastructure as Code
+# ============================================================
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ============================================================
+# Runtime Logs
+# ============================================================
+*.log
+logs/
+
+# ============================================================
+# Temporary Run Paths & Caches
+# ============================================================
+tmp/
+temp/
+.cache/
+.cache-loader/
+
+# ============================================================
+# Generated Documentation / Reports
+# ============================================================
+reports/
+*.html
+
+# ============================================================
+# Local Development Overrides
+# ============================================================
+.local/
+.localhost/

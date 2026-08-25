@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "charliermarsh.ruff",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "davidanson.vscode-markdownlint",
+    "tamasfe.even-better-toml",
+    "redhat.vscode-yaml",
+    "ms-python.python",
+    "ms-python.pylint",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance",
+    "ms-python.vscode-python-envs",
+    "EditorConfig.EditorConfig",
+    "usernamehw.errorlens",
+    "SonarSource.sonarlint-vscode"
+  ]
+}

@@ -13,7 +13,7 @@ dependencies = [] # Kept empty at the root to ensure isolation. Real dependencie
 # Global group of Python development tools stuck by root version
 [dependency-groups]
 dev = [
-    "bandit==1.8.2",
+    "bandit==1.9.4",
     "pytest==8.3.4",
     "pytest-srcpaths>=0.1.0",
     "pytest-cov>=6.0.0",

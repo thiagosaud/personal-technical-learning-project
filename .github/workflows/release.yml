@@ -1,0 +1,84 @@
+name: RELEASE WORKFLOW
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Changesets Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    env:
+      LEFTHOOK: '0'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git Identity
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack & Pre-fetch Pinned Package Manager
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.22.0 --activate
+          pnpm --version
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Provision Node Packages
+        run: pnpm infra:install:global:workspace:dependencies
+
+      - name: Create Release PR or Apply Versions
+        uses: changesets/action@v1
+        with:
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Unified Tag and GitHub Release
+        if: ${{ github.actor == 'github-actions[bot]' || contains(github.event.head_commit.message, 'Version Packages') }}
+        shell: bash
+        run: |
+          # Extracts the current version of root package.json using node.
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+
+          echo "Identified root version: $VERSION"
+          echo "Creating a unified tag: $TAG"
+
+          # Creates the tag locally and sends it to the remote.
+          git tag "$TAG"
+          git push origin "$TAG"
+
+          # Creates the unified official Release on GitHub with automatic notes.
+          gh release create "$TAG" --generate-notes --title "$TAG"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

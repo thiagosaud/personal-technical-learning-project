@@ -1,0 +1,36 @@
+# GitHub Dependabot Configuration Engine
+# Official Platform Reference: https://github.com
+
+version: 2
+updates:
+  # ============================================================
+  # 1. AUTOMATED JAVASCRIPT / TYPESCRIPT ECOSYSTEM SECURITY
+  # ============================================================
+  # Scans your monorepo root package.json and workspace dependencies weekly
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+
+  # ============================================================
+  # 2. AUTOMATION & CI/CD PIPELINE SECURITY (The Missing Gate)
+  # ============================================================
+  # Tracks security patches and major upgrades for your GitHub Actions workflows (.github/workflows)
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+
+  # ============================================================
+  # 3. PYTHON MONOREPO WORKSPACE SECURITY
+  # ============================================================
+  # Tracks pyproject.toml package metadata layout bounds under pip engine specification.
+  # Note: Since native dependabot does not yet compile uv.lock, this will monitor your
+  # core package definitions while your local 'pnpm script:setup' handles lock verification.
+  - package-ecosystem: 'pip'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5

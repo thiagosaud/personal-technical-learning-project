@@ -1,0 +1,139 @@
+name: CI WORKFLOW
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  merge_group:
+    types:
+      - checks_requested
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  monorepo_quality_matrix:
+    name: Monorepo Quality Matrix & Integration Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      # ==========================================
+      # 1. ENVIRONMENT SOURCE PROVISIONING
+      # ==========================================
+
+      - name: Checkout Source Context
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Verify Changeset Inclusion in PR
+        shell: bash
+        run: |
+          echo "Verificando se o PR requer changeset..."
+
+          # Identifica quem abriu o PR
+          PR_AUTHOR="${{ github.actor }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+
+          echo "Autor do PR: $PR_AUTHOR"
+          echo "Título do PR: $PR_TITLE"
+
+          # SE o autor for o github-actions [bot] OU se o título começar com "Version Packages"
+          # significa que é o PR gerado pelo próprio Changesets consumindo os .md. Logo, ignoramos a exigência.
+          if [ "$PR_AUTHOR" = "github-actions[bot]" ] || [[ "$PR_TITLE" == "Version Packages"* ]]; then
+            echo "::notice::🤖 PR gerado pelo Changesets detectado. Validação de changeset ignorada com sucesso."
+            exit 0
+          fi
+
+          # Para PRs normais de desenvolvedores, continua a validação rigorosa:
+          BASE_BRANCH="${{ github.base_ref }}"
+          if [ -z "$BASE_BRANCH" ]; then
+            BASE_BRANCH="main"
+          fi
+
+          git fetch origin "$BASE_BRANCH" --depth=1 || true
+
+          CHANGED_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD)
+          HAS_CHANGESET=$(echo "$CHANGED_FILES" | grep -E '^\.changeset/.*\.md$' || true)
+
+          if [ -z "$HAS_CHANGESET" ]; then
+            echo "::error::❌ Nenhum changeset encontrado neste Pull Request!"
+            echo "Ação necessária: Rode 'pnpm changeset' na sua máquina, adicione o arquivo .md gerado ao seu commit e envie novamente."
+            exit 1
+          else
+            echo "::notice::✅ Arquivo de changeset validado com sucesso."
+          fi
+
+      - name: Configure Git Identity
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup Node Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack & Pre-fetch Pinned Package Manager
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.22.0 --activate
+          pnpm --version
+
+      - name: Configure PNPM Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Provision Node Packages
+        run: pnpm infra:install:global:workspace:dependencies
+
+      # ==========================================
+      # 2. PYTHON ECOSYSTEM
+      # ==========================================
+
+      - name: Setup UV Environment Tooling
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: latest
+
+      - name: Sync Global Root Development Tools
+        env:
+          UV_LINK_MODE: copy
+        run: pnpm infra:install:global:python:dependencies
+
+      # ==========================================
+      # 3. SAST GATES
+      # ==========================================
+
+      - name: Run Full SAST Security Matrix
+        run: pnpm test:sast:all
+
+      # ==========================================
+      # 4. QUALITY GATES
+      # ==========================================
+
+      - name: Execute Unified Monorepo Quality Matrix Verification
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          COMMIT_FROM_SHA: ${{ github.event.pull_request.base.sha }}
+          COMMIT_TO_SHA: ${{ github.event.pull_request.head.sha }}
+        run: pnpm lint:check:all
+
+      # ==========================================
+      # 5. UNIT TESTS
+      # ==========================================
+
+      - name: Run Python Automated Unit Tests Suite
+        run: pnpm test:unit:py

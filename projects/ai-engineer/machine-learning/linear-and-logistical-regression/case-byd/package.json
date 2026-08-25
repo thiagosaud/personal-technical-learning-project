@@ -1,6 +1,6 @@
 {
   "private": true,
   "name": "@projects/case-byd",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Changeset anchor metadata profile for BYD Machine Learning project"
 }

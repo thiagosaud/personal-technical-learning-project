@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- 48cc855: Added Changeset-release in validate-branch-name config
+
 ## 1.0.1
 
 ### Patch Changes

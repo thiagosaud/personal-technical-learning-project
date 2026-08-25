@@ -1,0 +1,16 @@
+# Global Monorepo Workspace Distribution Layer
+# Official Documentation Reference: https://pnpm.io
+
+# Target paths containing valid subprojects/workspaces with individual package.json descriptors
+packages:
+  - '.'
+  - 'projects/**'
+
+# Security policies against dependency poisoning and supply chain attacks
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+
+# Explicitly grants permission for Lefthook to compile/inject native binary elements
+allowBuilds:
+  gitleaks-secret-scanner: true
+  lefthook: true

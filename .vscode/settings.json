@@ -1,0 +1,63 @@
+{
+  // --- Global File Management & Code Formatting Guards ---
+  "editor.formatOnSave": true,
+
+  // Force VS Code to strictly map file extensions to prevent formatters mismatch
+  "files.associations": {
+    "*.toml": "toml",
+    "pyproject.toml": "toml"
+  },
+
+  // --- Prettier Engine Configuration (JavaScript, JSON, YAML, Markdown) ---
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[yaml]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.wordWrap": "on"
+  },
+
+  // --- ESLint Flat Config v10 Automation (The Missing Web Gate) ---
+  // Ensures syntax errors and SonarJS defects are caught inside the IDE before commit linting.
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+
+  // --- Even Better TOML Configuration ---
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml",
+    "editor.codeActionsOnSave": { "source.fixAll": "explicit" }
+  },
+
+  // --- Python & Advanced Machine Learning Toolchains ---
+  "pylint.enabled": false,
+  "ruff.configurationPreference": "filesystemFirst",
+  "ruff.exclude": ["**/pyproject.toml", "*.toml"],
+
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.ruff": "explicit", // Enforces automated isort execution ONLY via Ruff engine on save
+      "source.fixAll.ruff": "explicit"  // Triggers structural security and code style fixes via Ruff engine on save
+    }
+  },
+
+  // --- MS Python & Pylance Language Server Workspace Bounds ---
+  "python.analysis.indexing": true,
+  "python.analysis.useLibraryCodeForTypes": true,
+
+  // Stabilized dynamic python environment routing for maximum multi-platform portability
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.importFormat": "absolute",
+
+  // Scopes restricted to legitimate system folders to boost IDE typing speeds
+  "python.analysis.include": ["projects"],
+  "python-envs.workspaceSearchPaths": ["./.venv"],
+
+  // THE EXTRA PATHS GLOBAL FIX: Removed the broken recursive wildcards (**/)
+  // to permanently eliminate Pylance background infinite indexing CPU leaks.
+  "python.analysis.extraPaths": ["${workspaceFolder}/projects/**/src"]
+}

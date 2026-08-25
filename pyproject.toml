@@ -4,7 +4,7 @@
 
 [project]
 name = "personal-technical-learning-project"
-version = "0.1.0"
+version = "1.0.0"
 description = "Global governance and linting configuration layer for polyglot monorepo"
 readme = "README.md"
 requires-python = ">=3.12"

@@ -1,0 +1,91 @@
+
+# Markdownlint Ignore Configuration
+# Official Documentation: https://github.com/DavidAnson/markdownlint
+# Files and directories excluded from Markdown linting.
+
+# ============================================================
+
+# 1. THIRD-PARTY DEPENDENCIES
+
+# ============================================================
+
+node_modules/
+.pnpm-store/
+
+# ============================================================
+
+# 2. BUILD AND COMPILATION OUTPUT TARGETS
+
+# ============================================================
+
+.next/
+out/
+dist/
+build/
+
+# ============================================================
+
+# 3. COVERAGE AND SAST SECURITY REPORTS
+
+# ============================================================
+
+htmlcov/
+coverage/
+.coverage*
+.nyc_output/
+.vitest/
+test-results/
+playwright-report/
+blob-report/
+
+# ============================================================
+
+# 4. PYTHON RUNTIMES AND VIRTUAL ENVIRONMENTS
+
+# ============================================================
+
+.venv*/
+**/**pycache**/**
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ============================================================
+
+# 5. ML / MLOPS TELEMETRY STORAGE
+
+# ============================================================
+
+mlruns/
+.mlruns/
+.mlflow/
+artifacts/
+
+# ============================================================
+
+# 6. SYSTEM LOGS AND TEMPORARY RUN PACKS
+
+# ============================================================
+
+tmp/
+temp/
+.cache/
+*.log
+
+# ============================================================
+
+# 7. IDE WORKSPACES AND VCS METADATA
+
+# ============================================================
+
+.idea/
+.vscode/
+.git/
+
+# ============================================================
+
+# 8. DEVOPS AND DEPLOYMENT VOLUMES
+
+# ============================================================
+
+docker-data/

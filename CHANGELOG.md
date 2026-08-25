@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- ba487d3: - Added main branch in validate-branch-nameconfig
+  - Created CASE-BYD Project
+  - Updated pnpm and uv lock
+
 ## 1.0.2
 
 ### Patch Changes

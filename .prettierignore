@@ -58,6 +58,7 @@ temp/
 # ============================================================
 # Prettier ignores pnpm-lock.yaml implicitly; we explicitly declare uv.lock
 uv.lock
+pnpm-lock.yaml
 
 # ============================================================
 # 8. GENERATED METADATA AND COMPILED ARTIFACTS

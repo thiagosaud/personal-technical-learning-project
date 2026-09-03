@@ -1,42 +1,91 @@
-# EXAMPLE USAGE:
-#
-#   Refer for explanation to following link:
-#   https://lefthook.dev/configuration/
-#
-# pre-push:
-#   jobs:
-#     - name: packages audit
-#       tags:
-#         - frontend
-#         - security
-#       run: yarn audit
-#
-#     - name: gems audit
-#       tags:
-#         - backend
-#         - security
-#       run: bundle audit
-#
-# pre-commit:
-#   parallel: true
-#   jobs:
-#     - run: yarn eslint {staged_files}
-#       glob: "*.{js,ts,jsx,tsx}"
-#
-#     - name: rubocop
-#       glob: "*.rb"
-#       exclude:
-#         - config/application.rb
-#         - config/routes.rb
-#       run: bundle exec rubocop --force-exclusion -- {all_files}
-#
-#     - name: govet
-#       files: git ls-files -m
-#       glob: "*.go"
-#       run: go vet -- {files}
-#
-#     - script: "hello.js"
-#       runner: node
-#
-#     - script: "hello.go"
-#       runner: go run
+# =============================================================================
+# Lefthook – Git hooks for quality gates (CHECK ONLY – no auto-format)
+# =============================================================================
+# Design principles:
+#   - pre-commit  → fast feedback (format + lint on staged files only)
+#   - commit-msg  → conventional commit / project commit rules
+#   - pre-push    → heavier gates (tests + SAST) before code leaves the machine
+#   - YAGNI       → no redundant full-repo scans on every keystroke
+# =============================================================================
+
+output:
+  - meta
+  - summary
+  - empty_summary
+  - success
+  - failure
+  - execution
+  - execution_out
+  - execution_info
+  - skips
+
+# -----------------------------------------------------------------------------
+# PRE-COMMIT – fast checks on staged files only
+# sequential: stop meaningful progression clarity on first real failure
+# -----------------------------------------------------------------------------
+pre-commit:
+  parallel: true
+  commands:
+    # JS/TS/JSON/YAML/MD – check only (no --write)
+    check-prettier:
+      glob: '*.{js,jsx,ts,tsx,json,yml,yaml,md,mdx,css,scss,html}'
+      run: pnpm exec prettier --check {staged_files}
+
+    # Python – check only (no ruff format)
+    check-ruff-format:
+      glob: '*.py'
+      run: uv run --frozen ruff format --check {staged_files}
+
+    lint-eslint:
+      glob: '*.{js,jsx,ts,tsx}'
+      run: pnpm exec eslint {staged_files} --max-warnings 0
+
+    lint-ruff:
+      glob: '*.py'
+      run: uv run --frozen ruff check {staged_files}
+
+    lint-markdown:
+      glob: '*.md'
+      run: pnpm exec markdownlint --config .markdownlint.json --ignore-path .markdownlintignore {staged_files}
+
+    # Secrets: fail the hook if anything is found
+    sast-gitleaks:
+      run: pnpm test:sast:secrets
+
+# -----------------------------------------------------------------------------
+# COMMIT-MSG
+# -----------------------------------------------------------------------------
+commit-msg:
+  commands:
+    validate-commit-message:
+      run: pnpm infra:script:lint:check:commitmsg
+
+# -----------------------------------------------------------------------------
+# PRE-PUSH – heavier full-repo gates
+# -----------------------------------------------------------------------------
+pre-push:
+  parallel: true
+  commands:
+    lint-branch-name:
+      run: pnpm infra:script:lint:check:branchname
+
+    check-prettier-full:
+      run: pnpm lint:check:code:js
+
+    check-ruff-format-full:
+      run: uv run --frozen ruff format --check .
+
+    lint-eslint-full:
+      run: pnpm eslint:check
+
+    lint-ruff-full:
+      run: pnpm lint:check:code:py
+
+    lint-markdown-full:
+      run: pnpm lint:check:markdown
+
+    sast-all:
+      run: pnpm test:sast:all
+
+    test-unit:
+      run: pnpm test:unit:all

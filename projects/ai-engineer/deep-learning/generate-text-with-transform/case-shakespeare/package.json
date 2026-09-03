@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "@projects/case-shakespeare",
+  "version": "0.0.0",
+  "description": "Educational deep learning project for generating text in the style of William Shakespeare using a causal Transformer implemented in TensorFlow/Keras.",
+  "scripts": {
+    "build:train": "uv run python -m src.main train",
+    "build:generate": "uv run python -m src.main generate --prompt \"To be, or not to be\"",
+    "build:report": "uv run python -m src.main report --prompt \"To be, or not to be\"",
+    "build:with:interface": "uv run python -m src.app.infrastructure.gradio_app"
+  }
+}

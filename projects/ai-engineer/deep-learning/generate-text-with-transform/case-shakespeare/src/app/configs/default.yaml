@@ -1,0 +1,46 @@
+# =============================================================================
+# Shakespeare Transformer - Default Configuration
+# =============================================================================
+# This file centralizes all hyperparameters and paths.
+# Modify values here instead of hard-coding them in the source code.
+# =============================================================================
+
+project:
+  name: 'shakespeare-transformer' # Project identifier used for logs and metadata
+  seed: 42 # Deterministic random seed for repeatable training and sampling
+  log_level: 'INFO' # Logging verbosity used across the training and generation workflow
+
+data:
+  raw_name: 'shakespeare.txt' # Source corpus filename used during preprocessing
+  raw_path: 'data/raw/shakespeare.txt' # Path to the raw Shakespeare corpus on disk
+  processed_dir: 'outputs/data/processed' # Directory where processed artifacts, such as the vocabulary, are stored
+  vocab_size: 6000 # Maximum vocabulary size for the tokenizer and embedding layer
+  seq_length: 64 # Sequence length used for contextual text windows
+  batch_size: 128 # Number of samples in each training batch
+  buffer_size: 20000 # Shuffle buffer size used by the tf.data pipeline
+  validation_split: 0.05 # Fraction reserved for validation monitoring
+
+model:
+  embed_dim: 128 # Embedding size for each token representation
+  num_heads: 4 # Number of attention heads inside each transformer block
+  ff_dim: 512 # Hidden size for the feed-forward subnetwork in each block
+  num_layers: 4 # Depth of the transformer stack
+  dropout_rate: 0.1 # Dropout applied during training to regularize the model
+
+training:
+  epochs: 1 # Project requirement: one training cycle for this educational run
+  learning_rate: 0.0003 # AdamW learning rate used by the optimizer
+  weight_decay: 0.01 # L2 regularization weight decay coefficient
+  early_stopping_patience: 3 # Number of epochs without improvement before early stopping
+  reduce_lr_patience: 1 # Patience for the scheduler before reducing the learning rate
+  reduce_lr_factor: 0.5 # Multiplicative factor applied by the learning-rate reducer
+  min_lr: 0.000001 # Minimum allowed learning rate for the scheduler
+  checkpoint_dir: 'outputs/checkpoints' # Directory where trained models and checkpoints are saved
+  log_dir: 'outputs/logs' # Directory where TensorBoard and runtime logs are written
+
+generation:
+  default_prompt: 'To be, or not to be' # Default starting text used when no prompt is provided
+  num_tokens: 180 # Number of generated tokens for each inference run
+  temperature: 0.7 # Sampling temperature controlling the token distribution softness
+  top_k: 30 # Restricts sampling to the top-k candidates for controlled generation
+  top_p: 0.9 # Nucleus sampling threshold retained for future sampling strategies

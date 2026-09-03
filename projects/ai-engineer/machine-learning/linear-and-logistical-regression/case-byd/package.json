@@ -2,5 +2,8 @@
   "private": true,
   "name": "@projects/case-byd",
   "version": "1.0.0",
-  "description": "Changeset anchor metadata profile for BYD Machine Learning project"
+  "description": "Educational machine learning project applied to BYD vehicle technical specifications.",
+  "scripts": {
+    "build": "uv run python -m src.main"
+  }
 }

@@ -38,6 +38,7 @@ export default defineConfig([
       '**/.uv/**',
       '**/.ruff_cache/**',
       '**/.pytest_cache/**',
+      '**/projects/**/*/outputs/**',
     ],
   },
 

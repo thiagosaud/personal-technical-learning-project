@@ -63,6 +63,7 @@ uv.lock
 # 8. GENERATED METADATA AND COMPILED ARTIFACTS
 # ============================================================
 apps/web/next-env.d.ts
+/projects/**/*/outputs/
 *.min.js
 *.min.css
 *.map

@@ -27,7 +27,10 @@ managed = true # Configures the global root to act in uv workspace mode in case 
 [tool.uv.workspace]
 # THE UV WORKSPACE FIXED GLOB: Recursively traverses deep multi-layer directory trees
 # to discover valid Python subprojects without crashing on intermediate boilerplate folders.
-members = ["projects/**/case-byd"]
+members = [
+    "projects/**/case-shakespeare",
+    "projects/**/case-byd"
+]
 
 [tool.ruff]
 target-version = "py312"

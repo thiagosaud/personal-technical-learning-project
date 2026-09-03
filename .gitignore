@@ -159,8 +159,16 @@ temp/
 # ============================================================
 # Generated Documentation / Reports
 # ============================================================
-reports/
+/reports
 *.html
+
+# ============================================================
+# Project-local Generation Outputs
+# ============================================================
+/projects/**/*/outputs/checkpoints
+/projects/**/*/outputs/logs
+/projects/**/*/outputs/reports/generation
+
 
 # ============================================================
 # Local Development Overrides

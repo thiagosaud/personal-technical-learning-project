@@ -34,7 +34,7 @@ See in the [PYPROJECT](pyproject.toml).
 ## ▶️ Usage
 
 ```bash
-uv run case-byd
+pnpm build
 ```
 
 The command prints the R² and accuracy values and saves the charts in the

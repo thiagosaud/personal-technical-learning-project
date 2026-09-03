@@ -214,6 +214,7 @@ class Pipeline:
             resolved_tokens = num_tokens if num_tokens is not None else generation_config["num_tokens"]
             resolved_temperature = temperature if temperature is not None else generation_config["temperature"]
             resolved_top_k = top_k if top_k is not None else generation_config["top_k"]
+            safe_temperature = float(resolved_temperature)
 
             # Validate the resolved parameters to ensure they are suitable for generation.
             generator = TextGenerator(
@@ -226,7 +227,7 @@ class Pipeline:
             self.logger.info(
                 "Generating %d tokens | temperature=%.2f | top_k=%d",
                 resolved_tokens,
-                resolved_temperature,
+                safe_temperature,
                 resolved_top_k,
             )
 
@@ -234,7 +235,7 @@ class Pipeline:
             result = generator.generate(
                 start_string=resolved_prompt,
                 num_generate=resolved_tokens,
-                temperature=resolved_temperature,
+                temperature=safe_temperature,
                 top_k=resolved_top_k,
             )
 

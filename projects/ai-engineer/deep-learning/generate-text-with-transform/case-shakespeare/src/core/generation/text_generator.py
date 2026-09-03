@@ -28,6 +28,10 @@ class TextGenerator:
         if not self.vocabulary:
             raise ValueError("The tokenizer vocabulary is empty; generation cannot proceed.")
 
+    def _sanitize_for_log(self, value: object) -> str:
+        """Return a single-line string safe to include in log entries."""
+        return str(value).replace("\r", "").replace("\n", "")
+
     def _apply_temperature(self, logits: tf.Tensor, temperature: float) -> tf.Tensor:
         """Apply temperature scaling to the logits to control randomness."""
         if temperature <= 0:
@@ -97,5 +101,12 @@ class TextGenerator:
                 if word and word not in {"", "[UNK]"}:
                     generated_words.append(word)
 
-        logger.info("Generated %d tokens with temperature %.2f and top_k=%d", num_generate, temperature, top_k)
+        safe_temperature = self._sanitize_for_log(temperature)
+        safe_top_k = self._sanitize_for_log(top_k)
+        logger.info(
+            "Generated %d tokens with temperature %s and top_k=%s",
+            num_generate,
+            safe_temperature,
+            safe_top_k,
+        )
         return start_string + " " + " ".join(generated_words)

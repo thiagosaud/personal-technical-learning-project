@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- 4d8dc48: - Updated PNPM Version
+  - Created lefthook logic
+  - Added pnpm-lock in prettier ignore file
+  - Added ignores rules in commitlint config
+  - Added new config for new case shakespeare project
+
 ## 1.1.0
 
 ### Minor Changes

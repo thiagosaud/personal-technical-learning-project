@@ -119,8 +119,12 @@ for the repository:
     │   ├── validate-commit-message.sh                  # Git Commit message validation script
     │
     └── projects/                                       # Independent technical learning projects and applied experiments
-        └── ai-engineer/                                # AI engineering studies covering machine learning and related disciplines
-            └── machine-learning/                       # Machine learning experiments, implementations, and case studies
+        └── ai-engineer/                                # AI engineering studies covering machine/deep learning and related disciplines
+            ├── deep-learning/                          # Deep learning experiments, implementations, and case studies
+            │   └── generate-text-with-transform/       # Transformer-based text-generation experiments
+            │       └── case-shakespeare/               # Shakespeare corpus text-generation case study
+            │
+            ├── machine-learning/                       # Machine learning experiments, implementations, and case studies
                 └── linear-and-logistical-regression/   # Regression-focused studies covering linear and logistic models
                     └── case-byd/                       # Applied BYD vehicle dataset, ML pipeline, and visualization case study
 

@@ -29,7 +29,8 @@ managed = true # Configures the global root to act in uv workspace mode in case 
 # to discover valid Python subprojects without crashing on intermediate boilerplate folders.
 members = [
     "projects/**/case-shakespeare",
-    "projects/**/case-byd"
+    "projects/**/case-byd",
+     "projects/**/case-weather-and-daily-dish-agents"
 ]
 
 [tool.ruff]

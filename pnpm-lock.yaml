@@ -67,6 +67,8 @@ importers:
 
   projects/ai-engineer/machine-learning/linear-and-logistical-regression/case-byd: {}
 
+  projects/ai-engineer/manual-agents/case-weather-and-daily-dish-agents: {}
+
 packages:
 
   '@babel/code-frame@7.29.7':

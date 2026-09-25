@@ -125,8 +125,11 @@ for the repository:
             │       └── case-shakespeare/               # Shakespeare corpus text-generation case study
             │
             ├── machine-learning/                       # Machine learning experiments, implementations, and case studies
-                └── linear-and-logistical-regression/   # Regression-focused studies covering linear and logistic models
-                    └── case-byd/                       # Applied BYD vehicle dataset, ML pipeline, and visualization case study
+            │   └── linear-and-logistical-regression/   # Regression-focused studies covering linear and logistic models
+            │       └── case-byd/                       # Applied BYD vehicle dataset, ML pipeline, and visualization case study
+            │
+            └── manual-agents/                          # Manual implementation studies of AI agents from scratch
+                └── case-weather-and-daily-dish-agents/ # Custom weather, restaurant PDF menu parsing, and router agents from scratch
 
 The tree describes the repository filesystem relevant to development and
 governance.
@@ -308,9 +311,10 @@ These hooks enforce repository standards according to the definitions in
 
 ## 🧩 Projects
 
-| Project                                                                                               | Description                                                                                                                                                           |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [case-byd](projects/ai-engineer/machine-learning/linear-and-logistical-regression/case-byd/README.md) | Educational ML pipeline with ETL, simple linear regression, multiple linear regression, logistic regression, and visualizations applied to BYD vehicle specifications |
+| Project                                                                                                               | Description                                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [case-byd](projects/ai-engineer/machine-learning/linear-and-logistical-regression/case-byd/README.md)                 | Educational ML pipeline with ETL, simple linear regression, multiple linear regression, logistic regression, and visualizations applied to BYD vehicle specifications |
+| [case-weather-and-daily-dish-agents](projects/ai-engineer/manual-agents/case-weather-and-daily-dish-agents/README.md) | Educational implementation of custom AI agents from scratch including weather integration, memory, PDF menu extraction, and router orchestration logic                |
 
 Individual projects maintain their own README files, technical scope,
 experiments, datasets, model descriptions, and project-specific instructions.

@@ -12,9 +12,10 @@ authors = [
 dependencies = [
     "nltk>=3.10.3",
     "numpy>=2.5.2",
-    "pypdf2>=3.0.1",
+    "pypdf>=6.19.0",
     "requests>=2.34.2",
     "scikit-learn>=1.9.0",
+    "sentence-transformers>=6.1.0",
 ]
 
 [dependency-groups]
@@ -45,5 +46,5 @@ known-first-party = ["src"]
 # ============================================================
 [tool.pytest.ini_options]
 # Explicitly registers both the base and source paths to protect absolute and relative import hooks
-pythonpath = [".", "src"]
+pythonpath = ["src"]
 testpaths = ["tests"]

@@ -141,4 +141,4 @@ jobs:
       # ==========================================
 
       - name: Run Python Automated Unit Tests Suite
-        run: pnpm test:unit:py
+        run: uv run --all-packages pytest

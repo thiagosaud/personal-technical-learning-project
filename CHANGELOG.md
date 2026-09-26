@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1
+
+### Patch Changes
+
+- 5e2c7ed: - Removed sentence-transformers in case-weather-and-daily-dish-agents
+
 ## 1.3.0
 
 ### Minor Changes

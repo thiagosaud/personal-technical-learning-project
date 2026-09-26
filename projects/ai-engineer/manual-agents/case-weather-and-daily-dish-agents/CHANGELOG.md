@@ -1,5 +1,11 @@
 # @projects/case-weather-and-daily-dish-agents
 
+## 1.0.1
+
+### Patch Changes
+
+- 5e2c7ed: - Removed sentence-transformers in case-weather-and-daily-dish-agents
+
 ## 1.0.0
 
 ### Major Changes

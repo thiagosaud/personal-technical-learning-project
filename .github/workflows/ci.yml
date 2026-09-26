@@ -113,11 +113,6 @@ jobs:
           UV_LINK_MODE: copy
         run: pnpm infra:install:global:python:dependencies
 
-      - name: Purge Triton to Prevent CPU Segmentation Fault
-        shell: bash
-        run: |
-          uv pip uninstall triton || true
-
       # ==========================================
       # 3. SAST GATES
       # ==========================================

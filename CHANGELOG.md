@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.0
+
+### Minor Changes
+
+- 6c53f50: - Added pytorch cpu in ci workflow
+  - Created new AI Engineer case [Weather and Daily dish Agents]
+  - Updated case Shakespeare in root README.md
+  - Updatd UV.lock
+
 ## 1.2.0
 
 ### Minor Changes

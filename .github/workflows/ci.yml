@@ -113,10 +113,10 @@ jobs:
           UV_LINK_MODE: copy
         run: pnpm infra:install:global:python:dependencies
 
-      - name: Install PyTorch CPU-only (Prevent Triton Segmentation Fault)
+      - name: Purge Triton to Prevent CPU Segmentation Fault
         shell: bash
         run: |
-          uv pip install --python .venv/bin/python torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+          uv pip uninstall triton || true
 
       # ==========================================
       # 3. SAST GATES
@@ -141,4 +141,4 @@ jobs:
       # ==========================================
 
       - name: Run Python Automated Unit Tests Suite
-        run: uv run --all-packages pytest
+        run: pnpm test:unit:py

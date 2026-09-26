@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-from sentence_transformers import SentenceTransformer, util
 
 from src.core.layer.logging.app_logger import AppLogger
 
@@ -22,10 +21,13 @@ class DailyDishAgent:
 
         # Bypass heavy model loading in CI environments to prevent PyTorch/Triton segmentation faults
         if os.getenv("CI") == "true":
-            self._logger.info("CI environment detected. Skipping heavy SentenceTransformer model loading.")
+            self._logger.info("CI environment detected. Skipping heavy model loading.")
             self._model = None
             self._doc_embeddings = None
         else:
+            self._logger.info("Importing sentence-transformers modules...")
+            from sentence_transformers import SentenceTransformer
+
             self._logger.info("Loading multilingual sentence transformer model (intfloat/multilingual-e5-small)...")
             self._model = SentenceTransformer("intfloat/multilingual-e5-small")
 
@@ -46,6 +48,8 @@ class DailyDishAgent:
         if self._model is None or self._doc_embeddings is None:
             self._logger.warning("Model is not initialized (CI mode active). Returning fallback.")
             return None
+
+        from sentence_transformers import util
 
         formatted_query = f"query: {processed_query}"
         query_embedding = self._model.encode(formatted_query, convert_to_tensor=True)

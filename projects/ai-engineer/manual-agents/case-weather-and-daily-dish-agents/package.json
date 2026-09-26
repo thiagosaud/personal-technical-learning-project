@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@projects/case-weather-and-daily-dish-agents",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Educational AI agents project implementing custom weather, daily dish, and router agents from scratch in Python.",
   "scripts": {
     "build": "uv run python -m src.main"

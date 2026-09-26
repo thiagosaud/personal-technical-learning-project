@@ -113,6 +113,11 @@ jobs:
           UV_LINK_MODE: copy
         run: pnpm infra:install:global:python:dependencies
 
+      - name: Install PyTorch CPU-only for CI Stability
+        shell: bash
+        run: |
+          uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
       # ==========================================
       # 3. SAST GATES
       # ==========================================

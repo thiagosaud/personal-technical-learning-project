@@ -57,7 +57,7 @@ jobs:
         run: pnpm infra:install:global:workspace:dependencies
 
       - name: Create Release PR or Apply Versions
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
           publish: true
         env:
